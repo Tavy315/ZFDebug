@@ -6,20 +6,10 @@
  * @package    ZFDebug_Controller
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
+ * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id$
  */
-
-/**
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Html
-    extends ZFDebug_Controller_Plugin_Debug_Plugin
-    implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
     /**
      * Contains plugin identifier name
@@ -33,11 +23,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html
      *
      * @param string $tab
      * @param string $panel
+     *
      * @return void
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -78,6 +68,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html
     public function getPanel()
     {
         $body = Zend_Controller_Front::getInstance()->getResponse()->getBody();
+
+        /* added by Octav */
+        if ('' == $body) {
+            return '';
+        }
+        /* added by Octav */
+
         $liberrors = libxml_use_internal_errors(true);
         $dom = new DOMDocument();
         $dom->loadHtml($body);
@@ -85,11 +82,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html
         $panel = '<h4>HTML Information</h4>';
         $panel .= $this->_isXhtml();
         $linebreak = $this->getLinebreak();
-        $panel .= $dom->getElementsByTagName('*')->length.' Tags in ' . round(strlen($body)/1024, 2).'K'.$linebreak
-                . $dom->getElementsByTagName('link')->length.' Link Tags'.$linebreak
-                . $dom->getElementsByTagName('script')->length.' Script Tags'.$linebreak
-                . $dom->getElementsByTagName('img')->length.' Images'.$linebreak
-                . '<form method="post" action="http://validator.w3.org/check"><p><input type="hidden" name="fragment" value="'.htmlentities($body).'"'.$this->getClosingBracket().'<input type="submit" value="Validate With W3C"'.$this->getClosingBracket().'</p></form>';
+        $panel .= $dom->getElementsByTagName('*')->length . ' Tags in ' . round(strlen($body) / 1024, 2) . 'K' . $linebreak
+            . $dom->getElementsByTagName('link')->length . ' Link Tags' . $linebreak
+            . $dom->getElementsByTagName('script')->length . ' Script Tags' . $linebreak
+            . $dom->getElementsByTagName('img')->length . ' Images' . $linebreak
+            . '<form method="post" action="http://validator.w3.org/check"><p><input type="hidden" name="fragment" value="'
+            . htmlentities($body) . '"' . $this->getClosingBracket() . '<input type="submit" value="Validate With W3C"'
+            . $this->getClosingBracket() . '</p></form>';
+
         return $panel;
     }
 }

@@ -6,16 +6,8 @@
  * @package    ZFDebug_Controller
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
+ * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id: $
- */
-
-/**
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin
 {
@@ -23,7 +15,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
 
     public function getLinebreak()
     {
-        return '<br'.$this->getClosingBracket();
+        return '<br' . $this->getClosingBracket();
     }
 
     public function getIconData()
@@ -48,6 +40,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
     {
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $doctype = $view->doctype();
+
         return $doctype->isXhtml();
     }
 
@@ -55,6 +48,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
      * Transforms data into readable format
      *
      * @param array $values
+     *
      * @return string
      */
     protected function _cleanData($values)
@@ -65,28 +59,29 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
             ksort($values);
         }
         $retVal = '<div class="pre">';
-        foreach ($values as $key => $value)
-        {
+        foreach ($values as $key => $value) {
             $key = htmlspecialchars($key);
             if (is_numeric($value)) {
-                $retVal .= $key.' => '.$value.$linebreak;
-            }
-            else if (is_string($value)) {
-                $retVal .= $key.' => \''.htmlspecialchars($value).'\''.$linebreak;
-            }
-            else if (is_array($value))
-            {
-                $retVal .= $key.' => '.self::_cleanData($value);
-            }
-            else if (is_object($value))
-            {
-                $retVal .= $key.' => '.get_class($value).' Object()'.$linebreak;
-            }
-            else if (is_null($value))
-            {
-                $retVal .= $key.' => NULL'.$linebreak;
+                $retVal .= $key . ' => ' . $value . $linebreak;
+            } else {
+                if (is_string($value)) {
+                    $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
+                } else {
+                    if (is_array($value)) {
+                        $retVal .= $key . ' => ' . self::_cleanData($value);
+                    } else {
+                        if (is_object($value)) {
+                            $retVal .= $key . ' => ' . get_class($value) . ' Object()' . $linebreak;
+                        } else {
+                            if (is_null($value)) {
+                                $retVal .= $key . ' => NULL' . $linebreak;
+                            }
+                        }
+                    }
+                }
             }
         }
-        return $retVal.'</div>';
+
+        return $retVal . '</div>';
     }
 }

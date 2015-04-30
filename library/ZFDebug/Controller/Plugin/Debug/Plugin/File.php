@@ -6,20 +6,10 @@
  * @package    ZFDebug_Controller
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
+ * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id$
  */
-
-/**
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- */
-class ZFDebug_Controller_Plugin_Debug_Plugin_File
-    extends ZFDebug_Controller_Plugin_Debug_Plugin
-    implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class ZFDebug_Controller_Plugin_Debug_Plugin_File extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
     /**
      * Contains plugin identifier name
@@ -61,6 +51,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File
      * Your own library extension(s)
      *
      * @param array $options
+     *
      * @return void
      */
     public function __construct(array $options = array())
@@ -69,8 +60,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File
         isset($options['library']) || $options['library'] = null;
 
         $this->_basePath = realpath($options['base_path']);
-        is_array($options['library']) || $options['library'] = array($options['library']);
-        $this->_library = array_merge($options['library'], array('Zend', 'ZFDebug'));
+        is_array($options['library']) || $options['library'] = array( $options['library'] );
+        $this->_library = array_merge($options['library'], array( 'Zend', 'ZFDebug' ));
     }
 
     /**
@@ -112,12 +103,12 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File
     {
         $linebreak = $this->getLinebreak();
         $included = $this->_getIncludedFiles();
-        $html = '<h4>' . count($included).' files included worth ';
+        $html = '<h4>' . count($included) . ' files included worth ';
         $size = 0;
         foreach ($included as $file) {
             $size += filesize($file);
         }
-        $html .= round($size/1024, 1).'K</h4>';
+        $html .= round($size / 1024, 1) . 'K</h4>';
 
         // $html .= 'Basepath: ' . $this->_basePath .$linebreak;
 
@@ -136,11 +127,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File
             foreach ($this->_library as $key => $library) {
                 if ('' != $library && in_array($library, $filePaths)) {
                     $libraryFiles[$key] .= $file . $linebreak;
-                    $inUserLib = TRUE;
+                    $inUserLib = true;
                 }
             }
             if (!$inUserLib) {
-                $html .= $file .$linebreak;
+                $html .= $file . $linebreak;
             }
         }
 
@@ -162,6 +153,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File
 
         $this->_includedFiles = get_included_files();
         sort($this->_includedFiles);
+
         return $this->_includedFiles;
     }
 }

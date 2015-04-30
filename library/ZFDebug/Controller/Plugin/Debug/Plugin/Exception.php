@@ -6,21 +6,12 @@
  * @package    ZFDebug_Controller
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
+ * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id$
  */
-
-/**
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
-    extends Zend_Controller_Plugin_Abstract
-    implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_Plugin_Abstract implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
+
     protected static $_logger;
 
     /**
@@ -53,6 +44,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
                 return false;
             }
         }
+
         return self::$_logger;
     }
 
@@ -85,7 +77,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
     {
         Zend_Controller_Front::getInstance()->registerPlugin($this);
 
-        set_error_handler(array($this , 'errorHandler'));
+        set_error_handler(array( $this, 'errorHandler' ));
     }
 
     /**
@@ -95,6 +87,29 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      */
     public function getTab()
     {
+        /*
+        $response = Zend_Controller_Front::getInstance()->getResponse();
+        foreach ($response->getException() as $e) {
+            $exception = get_class($e) . ': ' . $e->getMessage() 
+                       . ' thrown in ' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getFile())
+                       . ' on line ' . $e->getLine();
+            $exception .= '<ol>';
+            foreach ($e->getTrace() as $t) {
+                $func = $t['function'] . '()';
+                if (isset($t['class']))
+                    $func = $t['class'] . $t['type'] . $func;
+                if (! isset($t['file']))
+                    $t['file'] = 'unknown';
+                if (! isset($t['line']))
+                    $t['line'] = 'n/a';
+                $exception .= '<li>' . $func . ' in ' 
+                       . str_replace($_SERVER['DOCUMENT_ROOT'], '', $t['file']) 
+                       . ' on line ' . $t['line'] . '</li>';
+            }
+            $exception .= '</ol>';
+            if ($logger = self::getLogger())
+                $logger->crit($exception);
+        }*/
         return '';
     }
 
@@ -106,6 +121,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
     public function getPanel()
     {
         $this->_rendered = true;
+
         return '';
     }
 
@@ -116,12 +132,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      * @param string $message
      * @param string $file
      * @param string $line
+     *
      * @return bool
      */
     public static function errorHandler($level, $message, $file, $line)
     {
-        if (! ($level & error_reporting()))
+        if (!($level & error_reporting())) {
             return false;
+        }
         switch ($level) {
             case E_NOTICE:
             case E_USER_NOTICE:
@@ -144,11 +162,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
                 break;
         }
         self::$errors[] = array(
-            'type' => $type ,
-            'message' => $message ,
-            'file' => $file ,
-            'line' => $line,
-            'trace' => debug_backtrace()
+            'type'    => $type,
+            'message' => $message,
+            'file'    => $file,
+            'line'    => $line,
+            'trace'   => debug_backtrace()
         );
 
         $message = sprintf(
@@ -163,14 +181,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
         if (($logger = self::getLogger())) {
             $logger->$method($message);
         }
+
         return false;
     }
-
 
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
+     *
      * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
@@ -181,6 +200,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
+     *
      * @return void
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
@@ -191,6 +211,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
+     *
      * @return void
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
@@ -201,6 +222,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
+     *
      * @return void
      */
     public function postDispatch(Zend_Controller_Request_Abstract $request)
@@ -211,6 +233,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
+     *
      * @return void
      */
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
@@ -221,6 +244,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
+     *
      * @return void
      */
     public function dispatchLoopShutdown()
@@ -228,24 +252,28 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception
         $response = Zend_Controller_Front::getInstance()->getResponse();
         foreach ($response->getException() as $e) {
             $exception = get_class($e) . ': ' . $e->getMessage()
-                       . ' thrown in ' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getFile())
-                       . ' on line ' . $e->getLine();
+                . ' thrown in ' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getFile())
+                . ' on line ' . $e->getLine();
             $exception .= '<ol>';
             foreach ($e->getTrace() as $t) {
                 $func = $t['function'] . '()';
-                if (isset($t['class']))
+                if (isset($t['class'])) {
                     $func = $t['class'] . $t['type'] . $func;
-                if (! isset($t['file']))
+                }
+                if (!isset($t['file'])) {
                     $t['file'] = 'unknown';
-                if (! isset($t['line']))
+                }
+                if (!isset($t['line'])) {
                     $t['line'] = 'n/a';
+                }
                 $exception .= '<li>' . $func . ' in '
-                       . str_replace($_SERVER['DOCUMENT_ROOT'], '', $t['file'])
-                       . ' on line ' . $t['line'] . '</li>';
+                    . str_replace($_SERVER['DOCUMENT_ROOT'], '', $t['file'])
+                    . ' on line ' . $t['line'] . '</li>';
             }
             $exception .= '</ol>';
-            if ($logger = self::getLogger())
+            if ($logger = self::getLogger()) {
                 $logger->crit($exception);
+            }
         }
     }
 }

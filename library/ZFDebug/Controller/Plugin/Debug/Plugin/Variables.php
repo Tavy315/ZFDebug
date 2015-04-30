@@ -6,19 +6,12 @@
  * @package    ZFDebug_Controller
  * @subpackage Plugins
  * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
+ * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id$
- */
-
-/**
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
+
     /**
      * Contains plugin identifier name
      *
@@ -86,17 +79,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
             $viewVars = "No 'getVars()' method in view class";
         }
         $vars = '<div style="width:50%;float:left;">';
-        $vars .= '<h4>View variables</h4>'
-              . '<div id="ZFDebug_vars" style="margin-left:-22px">' . $viewVars . '</div>'
-              . '<h4>Request parameters</h4>'
-              . '<div id="ZFDebug_requests" style="margin-left:-22px">' . $this->_cleanData($this->_request->getParams()) . '</div>';
+        $vars .= '<h4>View variables</h4>' . '<div id="ZFDebug_vars" style="margin-left:-22px">' . $viewVars . '</div>';
         $vars .= '</div><div style="width:45%;float:left;">';
-        if ($this->_request->isPost())
-        {
-            $vars .= '<h4>Post variables</h4>'
-                   . '<div id="ZFDebug_post" style="margin-left:-22px">' . $this->_cleanData($this->_request->getPost()) . '</div>';
+        $vars .= '<h4>Request parameters</h4>' . '<div id="ZFDebug_requests" style="margin-left:-22px">' . $this->_cleanData($this->_request->getParams()) . '</div>';
+        if ($this->_request->isPost()) {
+            $vars .= '<h4>Post variables</h4>' . '<div id="ZFDebug_post" style="margin-left:-22px">' . $this->_cleanData($this->_request->getPost()) . '</div>';
         }
-        
+
         $vars .= '<h4>Constants</h4>';
         $constants = get_defined_constants(true);
         ksort($constants['user']);
@@ -108,11 +97,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
         $vars .= '<div id="ZFDebug_registry" style="margin-left:-22px">' . $this->_cleanData($registry) . '</div>';
 
         $cookies = $this->_request->getCookie();
-        $vars .= '<h4>Cookies</h4>'
-               . '<div id="ZFDebug_cookie" style="margin-left:-22px">' . $this->_cleanData($cookies) . '</div>';
+        $vars .= '<h4>Cookies</h4>' . '<div id="ZFDebug_cookie" style="margin-left:-22px">' . $this->_cleanData($cookies) . '</div>';
 
         $vars .= '</div><div style="clear:both">&nbsp;</div>';
+
         return $vars;
     }
-
 }
