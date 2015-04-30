@@ -6,17 +6,14 @@ Time spent, memory usage and number of database queries are presented at a glanc
 ![](http://jokke.dk/media/2011-zfdebug.png)
 
 The available plugins at this point are:
-
-    * Cache: Information on Zend_Cache, APC and Zend OPcache (for PHP 5.5).
-    * Database: Full listing of SQL queries from Zend_Db and the time for each.
-    * Exception: Error handling of errors and exceptions.
-    * File: Number and size of files included with complete list.
-    * Html: Number of external stylesheets and javascripts. Link to validate with W3C.
-        for custom memory measurements.
-    * Log: Timing information of current request, time spent in action controller and
-        custom timers. Also average, min and max time for requests.
-    * Session
-    * Variables: View variables, request info and contents of `$_COOKIE`, `$_POST` and `$_SESSION`
+   * Cache: Information on Zend_Cache, APC and Zend OPcache (for PHP 5.5).
+   * Database: Full listing of SQL queries from Zend_Db and the time for each.
+   * Exception: Error handling of errors and exceptions.
+   * File: Number and size of files included with complete list.
+   * Html: Number of external stylesheets and javascripts. Link to validate with W3C. for custom memory measurements.
+   * Log: Timing information of current request, time spent in action controller and custom timers. Also average, min and max time for requests.
+   * Session
+   * Variables: View variables, request info and contents of $_COOKIE, $_POST and $_SESSION
 
 Installation
 ------------
@@ -72,6 +69,56 @@ folder. Then add the following method to your bootstrap class (in ZF1.8+):
         $frontController = $this->getResource('frontController');
         $frontController->registerPlugin($debug);
     }
+    
+Sample Zend Plugin to load the ZFDebug toolbar
+------------
+
+Some use case will require that you set up callback functions. Especially, these happen to occur in the following plugins:
+* cache: the callback function is called when asked to clean the cache
+* language: the callback is called when we try to change the active language
+* auth: the callback is used to retrieve the real username when the default plugin would only give an id
+
+You can leverage those functionalities by setting the following class:
+
+class Yujia_Controller_Plugin_Debug extends ZFDebug_Controller_Plugin_Debug
+{
+   public function __construct($options = null)
+   {
+      // avoids constructing before required vars are available
+   }
+
+   public function preDispatch(Zend_Controller_Request_Abstract $request)
+   {
+      if (APPLICATION_ENV !== 'production') {
+         $auth_callback = function ($raw_user) {
+            // do the job for getting the real username from the raw data you would typically retrieve
+         };
+         $locale_callback = function () {
+            // do the job for changing locale
+         };
+         $cache_callback = function () {
+            // do the job for clearing the cache
+         };
+         $this->_options = array(
+            'image_path' => null,
+            'plugins' => array(
+               'Variables',
+               'ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2'	=> array(
+                  'entityManagers' => array(\Zend_Registry::get('em')),
+               ),
+               'File' => array('base_path' => APPLICATION_PATH . '/../'),
+               'Cache' => array('backend' => 'Zend_Cache', 'callback' => $cache_callback),
+               'Exception',
+               'Html',
+               'Locale' => array('callback' => $locale_callback),
+               'Auth' => array('user' => 'id', 'callback' => $auth_callback),
+            )
+         );
+         // Registering Debug plugin
+         parent::__construct();
+      }
+   }
+}
 
 Doctrine 1 Plugin
 ------------
