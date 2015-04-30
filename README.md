@@ -25,6 +25,21 @@ Installation
         }
     }
 
+Using Composer
+--------------
+You may now install ZFDebug using the dependency management tool Composer.
+
+To use ZFDebug with Composer, add the following to the require list in your
+project's composer.json file:
+
+	"require": {
+	    "jokkedk/zfdebug": "1.6.2"
+	},
+
+Run the install command to resolve and download the dependencies:
+
+	php composer.phar install
+
 Usage
 ------------
 To install, place the folder 'ZFDebug' in your library path, next to the Zend
@@ -48,7 +63,33 @@ folder. Then add the following method to your bootstrap class (in ZF1.8+):
 	    $frontController = $this->getResource('frontController');
 	    $frontController->registerPlugin($debug);
 	}
-	
+
+Doctrine 1 Plugin
+------------
+Here is example configuration for using the Doctrine Plugin:
+
+    protected function _initZFDebug()
+    {
+    	if (APPLICATION_ENV === 'development') {
+	        $options = array(
+	            'plugins' => array(
+	                'Variables',
+	                'File',
+	                'Memory',
+	                'Time',
+	                new ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine(),
+	                'Exception'
+	            )
+	        );
+
+	        $ZFDebug = new ZFDebug_Controller_Plugin_Debug($options);
+	        $frontController = Zend_Controller_Front::getInstance();
+	        $frontController->registerPlugin($ZFDebug);
+
+	        return $ZFDebug;
+        }
+    }
+
 Doctrine2 Plugin
 ------------
 
@@ -61,7 +102,7 @@ Here is example configuration for using the Doctrine2 Plugin:
 			$autoloader->registerNamespace('ZFDebug');
 			$em = $this->bootstrap('doctrine')->getResource('doctrine')->getEntityManager();
 			$em->getConnection()->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\DebugStack());
-			
+
 			$options = array(
 				'plugins' => array(
 					'Variables',
@@ -77,27 +118,12 @@ Here is example configuration for using the Doctrine2 Plugin:
 					'Registry',
 				)
 			);
-			
+
 			$debug = new ZFDebug_Controller_Plugin_Debug($options);
 			$this->bootstrap('frontController');
 			$frontController = $this->getResource('frontController');
 			$frontController->registerPlugin($debug);
 		}
 	}
-
-Using Composer
---------------
-You may now install ZFDebug using the dependency management tool Composer.
-
-To use ZFDebug with Composer, add the following to the require list in your
-project's composer.json file:
-
-	"require": {
-	    "jokkedk/zfdebug": "1.6.2"
-	},
-
-Run the install command to resolve and download the dependencies:
-
-	php composer.phar install
 
 Further documentation will follow as the github move progresses.
