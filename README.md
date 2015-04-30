@@ -87,7 +87,7 @@ You can leverage those functionalities by setting the following class:
         {
             // avoids constructing before required vars are available
         }
-    
+
         public function preDispatch(Zend_Controller_Request_Abstract $request)
         {
             if (APPLICATION_ENV !== 'production') {
