@@ -20,8 +20,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -49,7 +47,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the DebugBar
      *
      * @return string
      */
@@ -59,7 +57,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the DebugBar
      *
      * @return string
      */

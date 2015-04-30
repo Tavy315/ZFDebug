@@ -40,6 +40,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
     protected $_role = 'role';
 
     /**
+     * Function to get real world value for the user name
+     *
+     * @var string
+     */
+    protected $_callback = null;
+
+    /**
      * Contains Acls for this application
      *
      * @var Zend_Acl
@@ -49,9 +56,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Auth
      *
-     * @var string $user
-     * @var string $role
-     * @return void
+     * @var array $options
      */
     public function __construct(array $options = array())
     {
@@ -59,8 +64,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
         if (isset($options['user'])) {
             $this->_user = $options['user'];
         }
+
         if (isset($options['role'])) {
             $this->_role = $options['role'];
+        }
+
+        if (isset($options['callback']) && is_callable($options['callback'])) {
+            $this->_callback = $options['callback'];
         }
     }
 
@@ -92,19 +102,22 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
      */
     public function getTab()
     {
-        $username = 'Not Authed';
-        $role = 'Unknown Role';
-
         if (!$this->_auth->hasIdentity()) {
             return 'Not authorized';
         }
+
         $identity = $this->_auth->getIdentity();
+
         if (is_object($identity)) {
             $username = $this->_auth->getIdentity()->{$this->_user};
             $role = $this->_auth->getIdentity()->{$this->_role};
         } else {
             $username = $this->_auth->getIdentity();
             $role = '';
+        }
+
+        if (!empty($this->_callback) && is_callable($this->_callback)) {
+            $username = call_user_func($this->_callback, $username);
         }
 
         return $username . ' (' . $role . ')';

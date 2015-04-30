@@ -20,11 +20,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Html
-     *
-     * @param string $tab
-     * @param string $panel
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -51,7 +46,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the DebugBar
      *
      * @return string
      */
@@ -61,7 +56,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the DebugBar
      *
      * @return string
      */
@@ -75,10 +70,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
         }
         /* added by Octav */
 
-        $liberrors = libxml_use_internal_errors(true);
+        $errors = libxml_use_internal_errors(true);
         $dom = new DOMDocument();
         $dom->loadHtml($body);
-        libxml_use_internal_errors($liberrors);
+        libxml_use_internal_errors($errors);
         $panel = '<h4>HTML Information</h4>';
         $panel .= $this->_isXhtml();
         $linebreak = $this->getLinebreak();

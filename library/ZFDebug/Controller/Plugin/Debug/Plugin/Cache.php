@@ -24,22 +24,37 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     protected $_cacheBackends = array();
 
     /**
+     * @var callable
+     */
+    protected $_callback = array();
+
+    /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Cache
      *
      * @param array $options
-     *
-     * @return void
+     * @throws Zend_Exception
      */
     public function __construct(array $options = array())
     {
         if (!isset($options['backend'])) {
             throw new Zend_Exception("ZFDebug: Cache plugin needs 'backend' parameter");
         }
+
+//        if (is_string($options['backend'])) {
+//            $options['backend'] = \Zend_Registry::get($options['backend']);
+//        }
+
         is_array($options['backend']) || $options['backend'] = array( $options['backend'] );
+
         foreach ($options['backend'] as $name => $backend) {
             if ($backend instanceof Zend_Cache_Backend_ExtendedInterface) {
                 $this->_cacheBackends[$name] = $backend;
             }
+        }
+
+        if (isset($options['callback']) && is_callable($options['callback'])) {
+            $this->_callback = $options['callback'];
+            call_user_func($this->_callback);
         }
     }
 
@@ -64,7 +79,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the DebugBar
      *
      * @return string
      */
@@ -74,7 +89,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the DebugBar
      *
      * @return string
      */
@@ -105,7 +120,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
                     . $numEntries . ' Files cached ('
                     . round($cache['mem_size'] / 1024 / 1024, 1) . 'M)' . $linebreak
                     . $numHits . ' Hits ('
-                    . ($numHits === 0 ? 0 : round($numHits * 100 / ($numHits + $numMisses), 1)) . '%)'
+                    . round($numHits * 100 / ($numHits + $numMisses), 1) . '%)'
                     . $linebreak
                     . $expunges . ' Expunges (cache full count)';
             }
@@ -126,6 +141,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
             }
         }
 
+        /** @var Zend_Cache_Backend_ExtendedInterface $backend */
         foreach ($this->_cacheBackends as $name => $backend) {
             $fillingPercentage = $backend->getFillingPercentage();
             $ids = $backend->getIds();
@@ -133,7 +149,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
             # Print full class name, backends might be custom
             $panel .= '<h4>Cache ' . $name . ' (' . get_class($backend) . ')</h4>';
             $panel .= count($ids) . ' Entr' . (count($ids) > 1 ? 'ies' : 'y') . '' . $linebreak
-                . 'Filling Percentage: ' . $backend->getFillingPercentage() . '%' . $linebreak;
+                . 'Filling Percentage: ' . $fillingPercentage . '%' . $linebreak;
 
             $cacheSize = 0;
             foreach ($ids as $id) {
@@ -147,6 +163,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
             }
             $panel .= 'Valid Cache Size: ' . round($cacheSize / 1024, 1) . 'K';
         }
+
+        // adds form to clear the cache
+        $panel .= '<h4>Clear cache</h4>'
+            . $linebreak
+            . '<form method="post"><button name="clear_cache" type="submit" class="btn">Clear cache</button></form>';
 
         return $panel;
     }

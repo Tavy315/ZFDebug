@@ -22,9 +22,16 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
     protected $_identifier = 'exception';
 
     /**
+     * Original error handler
+     *
+     * @var callable
+     */
+    protected $_originalErrorHandler = null;
+
+    /**
      * Contains any errors
      *
-     * @var param array
+     * @var array
      */
     static $errors = array();
 
@@ -77,7 +84,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
     {
         Zend_Controller_Front::getInstance()->registerPlugin($this);
 
-        set_error_handler(array( $this, 'errorHandler' ));
+//        set_error_handler(array( $this, 'errorHandler' ));
+        $this->_originalErrorHandler = set_error_handler(array( $this, 'errorHandler' ));
     }
 
     /**
@@ -135,7 +143,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @return bool
      */
-    public static function errorHandler($level, $message, $file, $line)
+    public function errorHandler($level, $message, $file, $line)
     {
         if (!($level & error_reporting())) {
             return false;
@@ -175,11 +183,17 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
             str_replace($_SERVER['DOCUMENT_ROOT'], '', $file),
             $line
         );
-        // if (ini_get('log_errors'))
-        //     error_log(sprintf("%s: %s", $type, $message));
+
+        /*if (ini_get('log_errors')) {
+            error_log(sprintf("%s: %s", $type, $message));
+        }*/
 
         if (($logger = self::getLogger())) {
             $logger->$method($message);
+        }
+
+        if ($this->_originalErrorHandler) {
+            return call_user_func_array($this->_originalErrorHandler, func_get_args());
         }
 
         return false;

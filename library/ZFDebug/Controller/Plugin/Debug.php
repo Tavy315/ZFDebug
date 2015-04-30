@@ -9,7 +9,6 @@
  * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id$
  */
-
 class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
 {
     /**
@@ -37,17 +36,18 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      * @var array
      */
     public static $standardPlugins = array(
-        'Cache',
         'Auth',
-        'Html',
+        'Cache',
         'Database',
         'Doctrine1',
         'Doctrine2',
         'Exception',
         'File',
+        'Html',
+        'Locale',
+        'Log',
         'Session',
         'Variables',
-        'Log'
     );
 
     /**
@@ -117,7 +117,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      */
     public function getLogger()
     {
-        return $this->getPlugin('Log')->logger();
+        return $this->getPlugin('Log');
     }
 
     /**
@@ -452,6 +452,9 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
 	            document.onmouseup=function(e){
 	                clearTimeout(ZFDebugResizeTimer);
 	            }
+                $("#ZFDebug .arrayexpandcollapse").click(function() {
+                    $(this).next(".pre").toggle();
+                });
 	        };
 	        function ZFDebugResize() {
 	            window.zfdebugHeight = window.zfdebugMouse;

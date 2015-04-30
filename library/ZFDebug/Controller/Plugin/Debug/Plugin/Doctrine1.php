@@ -44,7 +44,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the DebugBar
      *
      * @author Paulius Petronis <paulius@art21.lt>
      * @return string
@@ -65,7 +65,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the DebugBar
      *
      * @author Paulius Petronis <paulius@art21.lt>
      * @return string

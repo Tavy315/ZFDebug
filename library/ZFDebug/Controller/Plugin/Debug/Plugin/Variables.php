@@ -11,7 +11,6 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
-
     /**
      * Contains plugin identifier name
      *
@@ -26,12 +25,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
-     *
-     * @return void
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -55,7 +51,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the DebugBar
      *
      * @return string
      */
@@ -65,7 +61,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the DebugBar
      *
      * @return string
      */

@@ -29,21 +29,21 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
      *
-     * @param Zend_Db_Adapter_Abstract|array $adapters
-     *
-     * @return void
+     * @param array $options
      */
     public function __construct(array $options = array())
     {
         if (!isset($options['adapter']) || !count($options['adapter'])) {
             if (Zend_Db_Table_Abstract::getDefaultAdapter()) {
-                $this->_db[0] = Zend_Db_Table_Abstract::getDefaultAdapter();
-                $this->_db[0]->getProfiler()->setEnabled(true);
+                $adapter = Zend_Db_Table_Abstract::getDefaultAdapter();
+                $adapter->getProfiler()->setEnabled(true);
+                $this->_db[0] = $adapter;
             }
         } else {
             if ($options['adapter'] instanceof Zend_Db_Adapter_Abstract) {
-                $this->_db[0] = $options['adapter'];
-                $this->_db[0]->getProfiler()->setEnabled(true);
+                $adapter = $options['adapter'];
+                $adapter->getProfiler()->setEnabled(true);
+                $this->_db[0] = $adapter;
             } else {
                 foreach ($options['adapter'] as $name => $adapter) {
                     if ($adapter instanceof Zend_Db_Adapter_Abstract) {
@@ -92,6 +92,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
 
         $adapterInfo = array();
 
+        /** @var Zend_Db_Adapter_Abstract $adapter */
         foreach ($this->_db as $adapter) {
             $profiler = $adapter->getProfiler();
             $adapterInfo[] = $profiler->getTotalNumQueries() . ' in ' . round($profiler->getTotalElapsedSecs() * 1000, 2) . ' ms';
@@ -128,6 +129,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     public function getProfile()
     {
         $html = '';
+        /**
+         * @var string $name
+         * @var Zend_Db_Adapter_Abstract $adapter
+         */
         foreach ($this->_db as $name => $adapter) {
             if ($profiles = $adapter->getProfiler()->getQueryProfiles()) {
                 $adapter->getProfiler()->setEnabled(false);
@@ -135,6 +140,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                     $html .= '<h4>Adapter ' . $name . '</h4>';
                 }
                 $html .= '<table cellspacing="0" cellpadding="0" width="100%">';
+
+                /** @var Zend_Db_Profiler_Query $profile */
                 foreach ($profiles as $profile) {
                     $html .= "<tr>\n<td style='text-align:right;padding-right:2em;' nowrap>\n"
                         . sprintf('%0.2f', $profile->getElapsedSecs() * 1000)

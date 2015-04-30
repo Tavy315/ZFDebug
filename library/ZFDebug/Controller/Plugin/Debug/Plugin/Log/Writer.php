@@ -62,7 +62,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
             $event['message'] = $event['message']['message'];
         } else {
             // self::$_lastEvent = null;
-            $event['message'] = $event['priorityName'] . ': ' . $event['message'];
+            $event['message'] = $event['priorityName'] . ': ' . print_r($event['message'], 1);
             $event['priorityName'] = '&nbsp;';
             $event['memory'] = '&nbsp;';
         }

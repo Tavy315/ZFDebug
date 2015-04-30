@@ -68,7 +68,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
                     $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
                 } else {
                     if (is_array($value)) {
-                        $retVal .= $key . ' => ' . self::_cleanData($value);
+//                        $retVal .= $key . ' => ' . self::_cleanData($value);
+                        $retVal .= '<a href="#" style="text-decoration:none" class="arrayexpandcollapse">&plusmn;&nbsp;' . $key . '</a> => ' . self::_cleanData($value) . '<br />';
                     } else {
                         if (is_object($value)) {
                             $retVal .= $key . ' => ' . get_class($value) . ' Object()' . $linebreak;
