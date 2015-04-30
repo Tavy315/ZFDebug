@@ -7,14 +7,14 @@ Time spent, memory usage and number of database queries are presented at a glanc
 
 The available plugins at this point are:
 
-  * Cache: Information on Zend_Cache, APC and Zend OPcache (for PHP 5.5).
-  * Database: Full listing of SQL queries from Zend_Db and the time for each.
-  * Exception: Error handling of errors and exceptions.
-  * File: Number and size of files included with complete list.
-  * Html: Number of external stylesheets and javascripts. Link to validate with W3C.
-for custom memory measurements.
-  * Log: Timing information of current request, time spent in action controller and custom timers. Also average, min and max time for requests.
-  * Variables: View variables, request info and contents of `$_COOKIE`, `$_POST` and `$_SESSION`
+    * Cache: Information on Zend_Cache, APC and Zend OPcache (for PHP 5.5).
+    * Database: Full listing of SQL queries from Zend_Db and the time for each.
+    * Exception: Error handling of errors and exceptions.
+    * File: Number and size of files included with complete list.
+    * Html: Number of external stylesheets and javascripts. Link to validate with W3C. for custom memory measurements.
+    * Log: Timing information of current request, time spent in action controller and custom timers. Also average, min and max time for requests.
+    * Session
+    * Variables: View variables, request info and contents of `$_COOKIE`, `$_POST` and `$_SESSION`
 
 Installation
 ------------
@@ -29,40 +29,47 @@ Using Composer
 --------------
 You may now install ZFDebug using the dependency management tool Composer.
 
-To use ZFDebug with Composer, add the following to the require list in your
-project's composer.json file:
+To use ZFDebug with Composer, add the following to the require list in your project's composer.json file:
 
-	"require": {
-	    "jokkedk/zfdebug": "1.6.2"
-	},
+    "require": {
+        "jokkedk/zfdebug": "1.6.2"
+    },
 
 Run the install command to resolve and download the dependencies:
 
-	php composer.phar install
+    php composer.phar install
 
 Usage
 ------------
 To install, place the folder 'ZFDebug' in your library path, next to the Zend
 folder. Then add the following method to your bootstrap class (in ZF1.8+):
 
-	protected function _initZFDebug()
-	{
-	    $autoloader = Zend_Loader_Autoloader::getInstance();
-	    $autoloader->registerNamespace('ZFDebug');
+    protected function _initZFDebug()
+    {
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->registerNamespace('ZFDebug');
 
-	    $options = array(
-	        'plugins' => array('Variables',
-	                           'Database' => array('adapter' => $db),
-	                           'File' => array('basePath' => '/path/to/project'),
-	                           'Cache' => array('backend' => $cache->getBackend()),
-	                           'Exception')
-	    );
-	    $debug = new ZFDebug_Controller_Plugin_Debug($options);
+        $options = array(
+            'plugins' => array(
+                'Variables',
+                'Database' => array(
+                    'adapter' => $db,
+                ),
+                'File' => array(
+                    'basePath' => '/path/to/project',
+                ),
+                'Cache' => array(
+                    'backend' => $cache->getBackend(),
+                ),
+                'Exception',
+            ),
+        );
+        $debug = new ZFDebug_Controller_Plugin_Debug($options);
 
-	    $this->bootstrap('frontController');
-	    $frontController = $this->getResource('frontController');
-	    $frontController->registerPlugin($debug);
-	}
+        $this->bootstrap('frontController');
+        $frontController = $this->getResource('frontController');
+        $frontController->registerPlugin($debug);
+    }
 
 Doctrine 1 Plugin
 ------------
@@ -70,23 +77,23 @@ Here is example configuration for using the Doctrine Plugin:
 
     protected function _initZFDebug()
     {
-    	if (APPLICATION_ENV === 'development') {
-	        $options = array(
-	            'plugins' => array(
-	                'Variables',
-	                'File',
-	                'Memory',
-	                'Time',
-	                new ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine(),
-	                'Exception'
-	            )
-	        );
+        if (APPLICATION_ENV === 'development') {
+            $options = array(
+                'plugins' => array(
+                    'Variables',
+                    'File',
+                    'Memory',
+                    'Time',
+                    new ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine(),
+                    'Exception'
+                )
+            );
 
-	        $ZFDebug = new ZFDebug_Controller_Plugin_Debug($options);
-	        $frontController = Zend_Controller_Front::getInstance();
-	        $frontController->registerPlugin($ZFDebug);
+            $ZFDebug = new ZFDebug_Controller_Plugin_Debug($options);
+            $frontController = Zend_Controller_Front::getInstance();
+            $frontController->registerPlugin($ZFDebug);
 
-	        return $ZFDebug;
+            return $ZFDebug;
         }
     }
 
@@ -96,34 +103,38 @@ Doctrine2 Plugin
 Here is example configuration for using the Doctrine2 Plugin:
 
     protected function _initZFDebug()
-	{
-		if (APPLICATION_ENV == 'development') {
-			$autoloader = Zend_Loader_Autoloader::getInstance();
-			$autoloader->registerNamespace('ZFDebug');
-			$em = $this->bootstrap('doctrine')->getResource('doctrine')->getEntityManager();
-			$em->getConnection()->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\DebugStack());
+    {
+        if (APPLICATION_ENV == 'development') {
+            $autoloader = Zend_Loader_Autoloader::getInstance();
+            $autoloader->registerNamespace('ZFDebug');
+            $em = $this->bootstrap('doctrine')->getResource('doctrine')->getEntityManager();
+            $em->getConnection()->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\DebugStack());
 
-			$options = array(
-				'plugins' => array(
-					'Variables',
-					'ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2'	=> array(
-						'entityManagers' => array($em),
-					),
-					'File'			=> array('basePath' => APPLICATION_PATH . '/application'),
-					//'Cache'		=> array('backend' => $cache->getBackend()),
-					'Exception',
-					'Html',
-					'Memory',
-					'Time',
-					'Registry',
-				)
-			);
+            $options = array(
+                'plugins' => array(
+                    'Variables',
+                    'ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2'	=> array(
+                        'entityManagers' => array($em),
+                    ),
+                    'File' => array(
+                        'basePath' => APPLICATION_PATH . '/application',
+                    ),
+                    /* 'Cache' => array(
+                        'backend' => $cache->getBackend()
+                    ), */
+                    'Exception',
+                    'Html',
+                    'Memory',
+                    'Time',
+                    'Registry',
+                )
+            );
 
-			$debug = new ZFDebug_Controller_Plugin_Debug($options);
-			$this->bootstrap('frontController');
-			$frontController = $this->getResource('frontController');
-			$frontController->registerPlugin($debug);
-		}
-	}
+            $debug = new ZFDebug_Controller_Plugin_Debug($options);
+            $this->bootstrap('frontController');
+            $frontController = $this->getResource('frontController');
+            $frontController->registerPlugin($debug);
+        }
+    }
 
 Further documentation will follow as the github move progresses.
