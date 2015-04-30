@@ -9,12 +9,6 @@
  * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
  * @version    $Id$
  */
-
-/**
- * @see Zend_Db_Table_Abstract
- */
-require_once 'Zend/Db/Table/Abstract.php';
-
 class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
 

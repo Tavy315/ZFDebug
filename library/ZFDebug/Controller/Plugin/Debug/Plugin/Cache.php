@@ -92,16 +92,22 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
             $memUsed = $memSize - $memAvail;
 
             $cache = apc_cache_info();
+
+            $numEntries = isset($cache['num_entries']) ? $cache['num_entries'] : 0;
+            $numHits = isset($cache['num_hits']) ? $cache['num_hits'] : 0;
+            $numMisses = isset($cache['num_misses']) ? $cache['num_misses'] : 0;
+            $expunges = isset($cache['expunges']) ? $cache['expunges'] : '';
+
             if ($cache['mem_size'] > 0) {
                 $panel .= '<h4>APC ' . phpversion('apc') . ' Enabled</h4>';
                 $panel .= round($memAvail / 1024 / 1024, 1) . 'M available, '
                     . round($memUsed / 1024 / 1024, 1) . 'M used' . $linebreak
-                    . $cache['num_entries'] . ' Files cached ('
+                    . $numEntries . ' Files cached ('
                     . round($cache['mem_size'] / 1024 / 1024, 1) . 'M)' . $linebreak
-                    . $cache['num_hits'] . ' Hits ('
-                    . round($cache['num_hits'] * 100 / ($cache['num_hits'] + $cache['num_misses']), 1) . '%)'
+                    . $numHits . ' Hits ('
+                    . ($numHits === 0 ? 0 : round($numHits * 100 / ($numHits + $numMisses), 1)) . '%)'
                     . $linebreak
-                    . $cache['expunges'] . ' Expunges (cache full count)';
+                    . $expunges . ' Expunges (cache full count)';
             }
         }
 

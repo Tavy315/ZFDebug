@@ -10,21 +10,6 @@
  * @version    $Id$
  */
 
-/**
- * @see Zend_Controller_Exception
- */
-require_once 'Zend/Controller/Exception.php';
-
-/**
- * @see Zend_Version
- */
-require_once 'Zend/Version.php';
-
-/**
- * @see ZFDebug_Controller_Plugin_Debug_Plugin_Text
- */
-require_once 'ZFDebug/Controller/Plugin/Debug/Plugin/Text.php';
-
 class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
 {
     /**
@@ -334,7 +319,6 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
                 $pluginClass = $plugin;
             }
 
-            require_once str_replace('_', DIRECTORY_SEPARATOR, $pluginClass) . '.php';
             $object = new $pluginClass($options);
             $this->registerPlugin($object);
         }
@@ -358,18 +342,19 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      */
     protected function _getVersionPanel()
     {
-        $panel = "<h4>ZFDebug $this->_version � Zend Framework "
+        $panel = "<h4>ZFDebug {$this->_version} - Zend Framework "
             . Zend_Version::VERSION . " on PHP " . phpversion() . "</h4>\n"
-            . "<!-- <p>�2008-2014 <a href='http://jokke.dk'>Joakim Nyg?rd</a>" . $this->getLinebreak()
+            . "<!-- <p>©2008-2015 <a href='http://jokke.dk'>Joakim Nygård</a>" . $this->getLinebreak()
             . "with contributions by <a href='http://www.bangal.de'>Andreas Pankratz</a> and others</p>"
             . "<p>The project is hosted at <a href='https://github.com/jokkedk/ZFDebug'>https://github.com/jokkedk/ZFDebug</a>"
             . " and released under the BSD License" . $this->getLinebreak()
             . "Includes images from the <a href='http://www.famfamfam.com/lab/icons/silk/'>Silk Icon set</a> by Mark James</p> -->"
             . "<p>Disable ZFDebug temporarily by sending ZFDEBUG_DISABLE as a GET/POST parameter</p>";
-        // $panel .= '<h4>Zend Framework '.Zend_Version::VERSION.' / PHP '.phpversion().' with extensions:</h4>';
-        // $extensions = get_loaded_extensions();
-        // natcasesort($extensions);
-        // $panel .= implode('<br>', $extensions);
+//        $panel .= '<h4>Zend Framework ' . Zend_Version::VERSION . ' / PHP ' . phpversion() . ' with extensions:</h4>';
+//        $extensions = get_loaded_extensions();
+//        natcasesort($extensions);
+//        $panel .= implode('<br>', $extensions);
+
         return $panel;
     }
 
