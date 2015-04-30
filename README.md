@@ -11,8 +11,10 @@ The available plugins at this point are:
     * Database: Full listing of SQL queries from Zend_Db and the time for each.
     * Exception: Error handling of errors and exceptions.
     * File: Number and size of files included with complete list.
-    * Html: Number of external stylesheets and javascripts. Link to validate with W3C. for custom memory measurements.
-    * Log: Timing information of current request, time spent in action controller and custom timers. Also average, min and max time for requests.
+    * Html: Number of external stylesheets and javascripts. Link to validate with W3C.
+        for custom memory measurements.
+    * Log: Timing information of current request, time spent in action controller and
+        custom timers. Also average, min and max time for requests.
     * Session
     * Variables: View variables, request info and contents of `$_COOKIE`, `$_POST` and `$_SESSION`
 
