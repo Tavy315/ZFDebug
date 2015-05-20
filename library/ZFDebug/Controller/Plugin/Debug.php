@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * ZFDebug Zend Additions
  *
@@ -25,9 +25,9 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
         'plugins'    => array(
             'Variables' => null,
             'Time'      => null,
-            'Memory'    => null
+            'Memory'    => null,
         ),
-        'image_path' => null
+        'image_path' => null,
     );
 
     /**
@@ -64,9 +64,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      * @param array|Zend_Config $options
      *
      * @throws Zend_Controller_Exception
-     * @return void
      */
-
     protected $_closingBracket = null;
 
     public function __construct($options = null)
@@ -231,10 +229,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
                 continue;
             }
 
-            if (null !== $this->_options['image_path'] &&
-                file_exists($this->_options['image_path'] . '/' . $plugin->getIdentifier() . '.png')
-            ) {
-
+            if (null !== $this->_options['image_path'] && file_exists($this->_options['image_path'] . '/' . $plugin->getIdentifier() . '.png')) {
                 $pluginIcon = $this->_options['image_path'] . '/' . $plugin->getIdentifier() . '.png';
             } else {
                 $pluginIcon = $plugin->getIconData();
@@ -285,7 +280,6 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
     /**
      * Load plugins set in config option
      *
-     * @return void;
      */
     protected function _loadPlugins()
     {
@@ -303,12 +297,12 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
             }
 
             if (!is_string($plugin)) {
-                throw new Exception("Invalid plugin name", 1);
+                throw new Exception('Invalid plugin name', 1);
             }
             $plugin = ucfirst($plugin);
 
             // Register a classname
-            if (in_array($plugin, ZFDebug_Controller_Plugin_Debug::$standardPlugins)) {
+            if (in_array($plugin, self::$standardPlugins)) {
                 // standard plugin
                 $pluginClass = 'ZFDebug_Controller_Plugin_Debug_Plugin_' . $plugin;
             } else {
@@ -343,13 +337,13 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
     protected function _getVersionPanel()
     {
         $panel = "<h4>ZFDebug {$this->_version} - Zend Framework "
-            . Zend_Version::VERSION . " on PHP " . phpversion() . "</h4>\n"
-            . "<!-- <p>©2008-2015 <a href='http://jokke.dk'>Joakim Nygård</a>" . $this->getLinebreak()
+            . Zend_Version::VERSION . ' on PHP ' . phpversion() . "</h4>\n"
+            . "<!-- <p>&copy;2008-2015 <a href='http://jokke.dk'>Joakim Nygård</a>" . $this->getLinebreak()
             . "with contributions by <a href='http://www.bangal.de'>Andreas Pankratz</a> and others</p>"
             . "<p>The project is hosted at <a href='https://github.com/jokkedk/ZFDebug'>https://github.com/jokkedk/ZFDebug</a>"
-            . " and released under the BSD License" . $this->getLinebreak()
+            . ' and released under the BSD License' . $this->getLinebreak()
             . "Includes images from the <a href='http://www.famfamfam.com/lab/icons/silk/'>Silk Icon set</a> by Mark James</p> -->"
-            . "<p>Disable ZFDebug temporarily by sending ZFDEBUG_DISABLE as a GET/POST parameter</p>";
+            . '<p>Disable ZFDebug temporarily by sending ZFDEBUG_DISABLE as a GET/POST parameter</p>';
 //        $panel .= '<h4>Zend Framework ' . Zend_Version::VERSION . ' / PHP ' . phpversion() . ' with extensions:</h4>';
 //        $extensions = get_loaded_extensions();
 //        natcasesort($extensions);
@@ -506,7 +500,6 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @param string $html
      *
-     * @return void
      */
     protected function _output($html)
     {

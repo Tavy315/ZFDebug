@@ -11,7 +11,6 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
-
     /**
      * Contains plugin identifier name
      *
@@ -40,7 +39,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      *
      * @param array $options
      *
-     * @return void
      */
     public function __construct(array $options = array())
     {
@@ -125,7 +123,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
             if ($logger = $em->getConnection()->getConfiguration()->getSqlLogger()) {
                 $html .= $this->getProfile($logger);
             } else {
-                $html .= "No logger enabled!";
+                $html .= 'No logger enabled!';
             }
         }
 
@@ -143,8 +141,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
     {
         $queries = '<table cellspacing="0" cellpadding="0" width="100%">';
         foreach ($logger->queries as $query) {
+            $queries .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', round($query['executionMS'] * 1000, 2)) . 'ms</td>' . PHP_EOL . '<td>';
 
-            $queries .= "<tr>\n<td style='text-align:right;padding-right:2em;' nowrap>\n" . sprintf('%0.2f', round($query['executionMS'] * 1000, 2)) . "ms</td>\n<td>";
             $params = array();
             if (!empty($query['params'])) {
                 $params = $query['params'];
@@ -157,17 +155,19 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
             } else {
                 $qry = htmlspecialchars($query['sql']);
             }
+
             if (self::$_sqlParseEnabled) {
                 $qry = self::prettifySql($qry);
             }
-            $queries .= $qry . "</td>\n</tr>\n";
+
+            $queries .= $qry . '</td>' . PHP_EOL . '</tr>' . PHP_EOL;
         }
-        $queries .= "</table>\n";
+        $queries .= '</table>' . PHP_EOL;
 
         return $queries;
     }
 
-    static public function prettifySql($qry)
+    public static function prettifySql($qry)
     {
         $cmd = 'echo ' . escapeshellarg((string) $qry) . ' | sqlformat - --keywords=upper -r';
         exec($cmd, $output, $error);
@@ -184,21 +184,18 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      * @param mixed $value
      * @param mixed $key
      *
-     * @return void
      */
     protected function _addQuotes(&$value, $key)
     {
         if (is_scalar($value)) {
             $value = "'" . $value . "'";
+        } elseif ($value instanceof DateTime) {
+            // Try to accommodate for Doctrine's use of more advanced data types
+            $value = "'" . $value->format('c') . "'";
+        } elseif (is_array($value)) {
+            $value = "'" . implode("', '", $value) . "'";
         } else {
-            if ($value instanceof DateTime) {
-                // Try to accommodate for Doctrine's use of more advanced data types
-                $value = "'" . $value->format('c') . "'";
-            } elseif (is_array($value)) {
-                $value = "'" . join("', '", $value) . "'";
-            } else {
-                $value = "Object of type '" . get_class($value) . "'";
-            }
+            $value = "Object of type '" . get_class($value) . "'";
         }
     }
 }

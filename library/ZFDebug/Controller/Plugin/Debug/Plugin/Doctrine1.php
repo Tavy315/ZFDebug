@@ -11,7 +11,6 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
-
     /**
      * plugin identified name
      *
@@ -31,7 +30,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
      * @param Zend_Db_Adapter_Abstract|array $adapters
      *
      * @author Paulius Petronis <paulius@art21.lt>
-     * @return void
      */
     public function __construct($profiler = null)
     {
@@ -59,7 +57,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
         foreach ($this->_profiler as $event) {
             $time += $event->getElapsedSecs();
         }
-        $html = "Query: " . $this->_profiler->count() . ' in ' . round($time * 1000, 2) . ' ms';
+        $html = 'Query: ' . $this->_profiler->count() . ' in ' . round($time * 1000, 2) . ' ms';
 
         return $html;
     }
@@ -79,14 +77,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
         $html = '<h4>Database queries</h4>';
         $html .= '<ol>';
         foreach ($this->_profiler as $event) {
-            $html .= '<li><strong>' . $event->getName() . " " . sprintf("%f", $event->getElapsedSecs()) . "</strong><br/>";
-            $html .= $event->getQuery() . "<br />";
+            $html .= '<li><strong>' . $event->getName() . ' ' . sprintf('%f', $event->getElapsedSecs()) . '</strong><br/>';
+            $html .= $event->getQuery() . '<br />';
             $params = $event->getParams();
             if (is_array($params) && !empty($params)) {
                 $html .= '<fieldset><legend>Params:</legend>';
                 $html .= '<ol>';
                 foreach ($params as $key => $value) {
-                    $html .= '<li>' . $key . " = " . $value . '</li>';
+                    $html .= '<li>' . $key . ' = ' . $value . '</li>';
                 }
                 $html .= '</ol>';
                 $html .= '</fieldset>';

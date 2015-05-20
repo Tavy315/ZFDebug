@@ -56,7 +56,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Auth
      *
-     * @var array $options
+     * @var array
      */
     public function __construct(array $options = array())
     {

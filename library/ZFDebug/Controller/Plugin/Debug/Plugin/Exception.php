@@ -11,7 +11,6 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_Plugin_Abstract implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
-
     protected static $_logger;
 
     /**
@@ -33,7 +32,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @var array
      */
-    static $errors = array();
+    public static $errors = array();
 
     protected $_rendered = false;
 
@@ -78,7 +77,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
     /**
      * Creates Error Plugin ans sets the Error Handler
      *
-     * @return void
      */
     public function __construct()
     {
@@ -98,7 +96,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
         /*
         $response = Zend_Controller_Front::getInstance()->getResponse();
         foreach ($response->getException() as $e) {
-            $exception = get_class($e) . ': ' . $e->getMessage() 
+            $exception = get_class($e) . ': ' . $e->getMessage()
                        . ' thrown in ' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getFile())
                        . ' on line ' . $e->getLine();
             $exception .= '<ol>';
@@ -110,8 +108,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
                     $t['file'] = 'unknown';
                 if (! isset($t['line']))
                     $t['line'] = 'n/a';
-                $exception .= '<li>' . $func . ' in ' 
-                       . str_replace($_SERVER['DOCUMENT_ROOT'], '', $t['file']) 
+                $exception .= '<li>' . $func . ' in '
+                       . str_replace($_SERVER['DOCUMENT_ROOT'], '', $t['file'])
                        . ' on line ' . $t['line'] . '</li>';
             }
             $exception .= '</ol>';
@@ -174,11 +172,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
             'message' => $message,
             'file'    => $file,
             'line'    => $line,
-            'trace'   => debug_backtrace()
+            'trace'   => debug_backtrace(),
         );
 
         $message = sprintf(
-            "%s in %s on line %d",
+            '%s in %s on line %d',
             $message,
             str_replace($_SERVER['DOCUMENT_ROOT'], '', $file),
             $line
@@ -204,7 +202,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
@@ -215,7 +212,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
@@ -226,7 +222,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
@@ -237,7 +232,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
@@ -248,7 +242,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
     {
@@ -259,7 +252,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function dispatchLoopShutdown()
     {

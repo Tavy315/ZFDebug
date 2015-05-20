@@ -49,9 +49,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
     public function getTab()
     {
         // $this->_logger->zflog('test');
-        $tab = " Log";
+        $tab = ' Log';
         if ($this->_writer->getErrorCount()) {
-            $tab .= " (" . $this->_writer->getErrorCount() . ")";
+            $tab .= ' (' . $this->_writer->getErrorCount() . ')';
             $_COOKIE['ZFDebugCollapsed'] = 'ZFDebug_' . $this->getIdentifier();
         }
 
@@ -119,7 +119,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
                 array(
                     'time'    => $this->_marks[$name]['time'],
                     'memory'  => $this->_marks[$name]['memory'],
-                    'message' => $name
+                    'message' => $name,
                 )
             );
         } else {
@@ -134,7 +134,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
                     array(
                         'time'    => round($this->_marks[$name]['time']) . 'ms',
                         'memory'  => round($this->_marks[$name]['memory'] / 1024) . 'K',
-                        'message' => $name
+                        'message' => $name,
                     )
                 );
             }
@@ -146,7 +146,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
@@ -158,7 +157,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
@@ -170,7 +168,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
@@ -185,7 +182,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
@@ -200,7 +196,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
     {
@@ -212,7 +207,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
      *
      * @param Zend_Controller_Request_Abstract
      *
-     * @return void
      */
     public function dispatchLoopShutdown()
     {

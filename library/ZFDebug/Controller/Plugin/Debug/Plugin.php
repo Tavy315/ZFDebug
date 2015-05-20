@@ -39,7 +39,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
     protected function _isXhtml()
     {
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
+        /** @see Zend_View_Helper_Doctype::doctype() */
+        /** @var Zend_View_Helper_Doctype $doctype */
         $doctype = $view->doctype();
+
+        /** @see Zend_View_Helper_Doctype::isXhtml() */
 
         return $doctype->isXhtml();
     }
@@ -63,23 +67,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
             $key = htmlspecialchars($key);
             if (is_numeric($value)) {
                 $retVal .= $key . ' => ' . $value . $linebreak;
-            } else {
-                if (is_string($value)) {
-                    $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
-                } else {
-                    if (is_array($value)) {
-//                        $retVal .= $key . ' => ' . self::_cleanData($value);
-                        $retVal .= '<a href="#" style="text-decoration:none" class="arrayexpandcollapse">&plusmn;&nbsp;' . $key . '</a> => ' . self::_cleanData($value) . '<br />';
-                    } else {
-                        if (is_object($value)) {
-                            $retVal .= $key . ' => ' . get_class($value) . ' Object()' . $linebreak;
-                        } else {
-                            if (is_null($value)) {
-                                $retVal .= $key . ' => NULL' . $linebreak;
-                            }
-                        }
-                    }
-                }
+            } elseif (is_string($value)) {
+                $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
+            } elseif (is_array($value)) {
+                // $retVal .= $key . ' => ' . self::_cleanData($value);
+                $retVal .= '<a href="#" style="text-decoration:none" class="arrayexpandcollapse">&plusmn;&nbsp;' . $key . '</a> => ' . self::_cleanData($value) . '<br />';
+            } elseif (is_object($value)) {
+                $retVal .= $key . ' => ' . get_class($value) . ' Object()' . $linebreak;
+            } elseif (is_null($value)) {
+                $retVal .= $key . ' => NULL' . $linebreak;
             }
         }
 

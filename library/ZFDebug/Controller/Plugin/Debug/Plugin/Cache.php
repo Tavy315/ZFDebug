@@ -31,7 +31,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Cache
      *
-     * @param array $options
+     * @param  array          $options
      * @throws Zend_Exception
      */
     public function __construct(array $options = array())

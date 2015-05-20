@@ -11,7 +11,6 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
-
     /**
      * Contains plugin identifier name
      *
@@ -39,17 +38,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                 $adapter->getProfiler()->setEnabled(true);
                 $this->_db[0] = $adapter;
             }
+        } elseif ($options['adapter'] instanceof Zend_Db_Adapter_Abstract) {
+            $adapter = $options['adapter'];
+            $adapter->getProfiler()->setEnabled(true);
+            $this->_db[0] = $adapter;
         } else {
-            if ($options['adapter'] instanceof Zend_Db_Adapter_Abstract) {
-                $adapter = $options['adapter'];
-                $adapter->getProfiler()->setEnabled(true);
-                $this->_db[0] = $adapter;
-            } else {
-                foreach ($options['adapter'] as $name => $adapter) {
-                    if ($adapter instanceof Zend_Db_Adapter_Abstract) {
-                        $adapter->getProfiler()->setEnabled(true);
-                        $this->_db[$name] = $adapter;
-                    }
+            foreach ($options['adapter'] as $name => $adapter) {
+                if ($adapter instanceof Zend_Db_Adapter_Abstract) {
+                    $adapter->getProfiler()->setEnabled(true);
+                    $this->_db[$name] = $adapter;
                 }
             }
         }
@@ -121,6 +118,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
         } else {
             $html .= ' – Metadata cache DISABLED';
         }
+
         $html .= '</h4>';
 
         return $html . $this->getProfile();
@@ -143,9 +141,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
 
                 /** @var Zend_Db_Profiler_Query $profile */
                 foreach ($profiles as $profile) {
-                    $html .= "<tr>\n<td style='text-align:right;padding-right:2em;' nowrap>\n"
-                        . sprintf('%0.2f', $profile->getElapsedSecs() * 1000)
-                        . "ms</td>\n<td>";
+                    $html .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', $profile->getElapsedSecs() * 1000) . 'ms</td>' . PHP_EOL . '<td>';
+
                     $params = $profile->getQueryParams();
                     array_walk($params, array( $this, '_addQuotes' ));
                     $paramCount = count($params);
@@ -160,10 +157,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
 
                     # Run explain if enabled, supported adapter and SELECT query
                     if ($this->_explain && $supportedAdapter) {
-                        $html .= "</td><td style='color:#7F7F7F;padding-left:2em;' nowrap>";
+                        $html .= '</td><td style="color:#7F7F7F;padding-left:2em;" nowrap>';
 
                         foreach ($adapter->fetchAll('EXPLAIN ' . $profile->getQuery()) as $explain) {
-                            $html .= "<div style='padding-bottom:0.5em'>";
+                            $html .= '<div style="padding-bottom:0.5em">';
                             $explainData = array(
                                 'Type'          => $explain['select_type'] . ', ' . $explain['type'],
                                 'Table'         => $explain['table'],
@@ -179,13 +176,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                             foreach ($explainData as $key => $value) {
                                 $html .= "$key: <span style='color:#ffb13e'>$value</span><br>\n";
                             }
-                            $html .= "</div>";
+                            $html .= '</div>';
                         }
                     }
 
-                    $html .= "</td>\n</tr>\n";
+                    $html .= '</td>' . PHP_EOL . '</tr>' . PHP_EOL;
                 }
-                $html .= "</table>\n";
+                $html .= '</table>' . PHP_EOL;
             }
         }
 

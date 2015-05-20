@@ -90,28 +90,20 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
             $key = htmlspecialchars($key);
             if (is_numeric($value)) {
                 $retVal .= $key . ' => ' . $value . $linebreak;
-            } else {
-                if (is_string($value)) {
-                    $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
-                } else {
-                    if (is_array($value)) {
-                        $retVal .= $key . ' => Array' . $linebreak;
-                        $retVal .= self::_cleanData($value);
-                    } else {
-                        if (is_object($value)) {
-                            $array = array();
-                            foreach ($value as $member => $data) {
-                                $array[$member] = $data;
-                            }
-                            $retVal .= $key . ' => ' . get_class($value) . ' Object' . $linebreak;
-                            $retVal .= self::_cleanData($array);
-                        } else {
-                            if (is_null($value)) {
-                                $retVal .= $key . ' => NULL' . $linebreak;
-                            }
-                        }
-                    }
+            } elseif (is_string($value)) {
+                $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
+            } elseif (is_array($value)) {
+                $retVal .= $key . ' => Array' . $linebreak;
+                $retVal .= self::_cleanData($value);
+            } elseif (is_object($value)) {
+                $array = array();
+                foreach ($value as $member => $data) {
+                    $array[$member] = $data;
                 }
+                $retVal .= $key . ' => ' . get_class($value) . ' Object' . $linebreak;
+                $retVal .= self::_cleanData($array);
+            } elseif (is_null($value)) {
+                $retVal .= $key . ' => NULL' . $linebreak;
             }
         }
 
