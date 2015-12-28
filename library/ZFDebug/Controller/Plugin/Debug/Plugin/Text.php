@@ -42,7 +42,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Text implements ZFDebug_Controller_
      *
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (isset($options['tab'])) {
             $this->setTab($options['tab']);

@@ -96,7 +96,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
                 $retVal .= $key . ' => Array' . $linebreak;
                 $retVal .= self::_cleanData($value);
             } elseif (is_object($value)) {
-                $array = array();
+                $array = [];
                 foreach ($value as $member => $data) {
                     $array[$member] = $data;
                 }

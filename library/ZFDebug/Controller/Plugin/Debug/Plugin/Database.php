@@ -21,7 +21,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     /**
      * @var array
      */
-    protected $_db = array();
+    protected $_db = [];
 
     protected $_explain = false;
 
@@ -30,7 +30,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
      *
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['adapter']) || !count($options['adapter'])) {
             if (Zend_Db_Table_Abstract::getDefaultAdapter()) {
@@ -87,7 +87,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
             return 'No adapter';
         }
 
-        $adapterInfo = array();
+        $adapterInfo = [];
 
         /** @var Zend_Db_Adapter_Abstract $adapter */
         foreach ($this->_db as $adapter) {
@@ -128,7 +128,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     {
         $html = '';
         /**
-         * @var string $name
+         * @var string                   $name
          * @var Zend_Db_Adapter_Abstract $adapter
          */
         foreach ($this->_db as $name => $adapter) {
@@ -144,7 +144,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                     $html .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', $profile->getElapsedSecs() * 1000) . 'ms</td>' . PHP_EOL . '<td>';
 
                     $params = $profile->getQueryParams();
-                    array_walk($params, array( $this, '_addQuotes' ));
+                    array_walk($params, [ $this, '_addQuotes' ]);
                     $paramCount = count($params);
                     if ($paramCount) {
                         $html .= htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $profile->getQuery(), 1));
@@ -161,12 +161,12 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
 
                         foreach ($adapter->fetchAll('EXPLAIN ' . $profile->getQuery()) as $explain) {
                             $html .= '<div style="padding-bottom:0.5em">';
-                            $explainData = array(
+                            $explainData = [
                                 'Type'          => $explain['select_type'] . ', ' . $explain['type'],
                                 'Table'         => $explain['table'],
                                 'Possible keys' => str_replace(',', ', ', $explain['possible_keys']),
                                 'Key used'      => $explain['key'],
-                            );
+                            ];
                             if ($explain['Extra']) {
                                 $explainData['Extra'] = $explain['Extra'];
                             }

@@ -35,7 +35,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
      *
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (isset($options['callback']) && is_callable($options['callback'])) {
             $this->_callback = $options['callback'];

@@ -21,12 +21,12 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     /**
      * @var Zend_Cache_Backend_ExtendedInterface
      */
-    protected $_cacheBackends = array();
+    protected $_cacheBackends = [];
 
     /**
      * @var callable
      */
-    protected $_callback = array();
+    protected $_callback = [];
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Cache
@@ -34,7 +34,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
      * @param  array          $options
      * @throws Zend_Exception
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['backend'])) {
             throw new Zend_Exception("ZFDebug: Cache plugin needs 'backend' parameter");
@@ -44,7 +44,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
 //            $options['backend'] = \Zend_Registry::get($options['backend']);
 //        }
 
-        is_array($options['backend']) || $options['backend'] = array( $options['backend'] );
+        is_array($options['backend']) || $options['backend'] = [ $options['backend'] ];
 
         foreach ($options['backend'] as $name => $backend) {
             if ($backend instanceof Zend_Cache_Backend_ExtendedInterface) {

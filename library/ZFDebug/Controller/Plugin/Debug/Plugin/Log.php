@@ -16,7 +16,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
     protected $_logger;
     protected $_writer;
 
-    protected $_marks = array();
+    protected $_marks = [];
 
     public function __construct()
     {
@@ -116,11 +116,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
                 $this->_marks[$name]['memory'] = 'N/A';
             }
             $this->_logger->zflog(
-                array(
+                [
                     'time'    => $this->_marks[$name]['time'],
                     'memory'  => $this->_marks[$name]['memory'],
                     'message' => $name,
-                )
+                ]
             );
         } else {
             $this->_marks[$name]['time'] = (microtime(true) - $_SERVER['REQUEST_TIME']) * 1000;
@@ -131,11 +131,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log extends Zend_Controller_Plugin_
             }
             if ($logFirst) {
                 $this->_logger->zflog(
-                    array(
+                    [
                         'time'    => round($this->_marks[$name]['time']) . 'ms',
                         'memory'  => round($this->_marks[$name]['memory'] / 1024) . 'K',
                         'message' => $name,
-                    )
+                    ]
                 );
             }
         }

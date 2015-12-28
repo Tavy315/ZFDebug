@@ -32,7 +32,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @var array
      */
-    public static $errors = array();
+    public static $errors = [];
 
     protected $_rendered = false;
 
@@ -83,7 +83,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
         Zend_Controller_Front::getInstance()->registerPlugin($this);
 
 //        set_error_handler(array( $this, 'errorHandler' ));
-        $this->_originalErrorHandler = set_error_handler(array( $this, 'errorHandler' ));
+        $this->_originalErrorHandler = set_error_handler([ $this, 'errorHandler' ]);
     }
 
     /**
@@ -167,13 +167,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
                 $type = 'Unknown, ' . $level;
                 break;
         }
-        self::$errors[] = array(
+        self::$errors[] = [
             'type'    => $type,
             'message' => $message,
             'file'    => $file,
             'line'    => $line,
             'trace'   => debug_backtrace(),
-        );
+        ];
 
         $message = sprintf(
             '%s in %s on line %d',

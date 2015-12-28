@@ -15,8 +15,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $front = $this->getResource('FrontController');
 
         // Only enable zfdebug if options have been specified for it
-        if ($this->hasOption('zfdebug'))
-        {
+        if ($this->hasOption('zfdebug')) {
             // Create ZFDebug instance
             $zfdebug = new ZFDebug_Controller_Plugin_Debug($this->getOption('zfdebug'));
 
@@ -30,13 +29,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // zfdebug.plugins.Time = null
         // zfdebug.plugins.Memory = null
         // ...
-        
+
         // Plugins that take objects as parameters like Database and Cache
         // need to be registered manually:
-        
+
         // $zfdebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Database($db));
-        
-        
+
         // Alternative configuration without application.ini
         // $options = array(
         //     'plugins' => array('variables', 'database', 

@@ -11,7 +11,7 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_Abstract
 {
-    protected $_messages = array();
+    protected $_messages = [];
     protected $_errors = 0;
 
     public static function factory($config)
@@ -67,11 +67,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
         }
         foreach ($event as $name => $value) {
             if ('message' == $name) {
-//                $measure = '&nbsp;';
+                //                $measure = '&nbsp;';
                 if ((is_object($value) && !method_exists($value, '__toString'))) {
                     $value = gettype($value);
                 } elseif (is_array($value)) {
-//                    $measure = $value[0];
+                    //                    $measure = $value[0];
                     $value = $value[1];
                 }
             }

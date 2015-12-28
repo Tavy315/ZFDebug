@@ -16,26 +16,26 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @var array
      */
-    protected $_plugins = array();
+    protected $_plugins = [];
 
     /**
      * Contains options to change Debug Bar behavior
      */
-    protected $_options = array(
-        'plugins'    => array(
+    protected $_options = [
+        'plugins'    => [
             'Memory'    => null,
             'Time'      => null,
             'Variables' => null,
-        ),
+        ],
         'image_path' => null,
-    );
+    ];
 
     /**
      * Standard plugins
      *
      * @var array
      */
-    public static $standardPlugins = array(
+    public static $standardPlugins = [
         'Auth',
         'Cache',
         'Database',
@@ -48,7 +48,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
         'Log',
         'Session',
         'Variables',
-    );
+    ];
 
     /**
      * Debug Bar Version Number
@@ -125,7 +125,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @return ZFDebug_Controller_Plugin_Debug
      */
-    public function setOptions(array $options = array())
+    public function setOptions(array $options = [])
     {
         if (isset($options['image_path'])) {
             $this->_options['image_path'] = $options['image_path'];
@@ -287,7 +287,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
             if (is_numeric($plugin)) {
                 # Plugin passed as array value instead of key
                 $plugin = $options;
-                $options = array();
+                $options = [];
             }
 
             // Register an instance

@@ -23,7 +23,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      *
      * @var array
      */
-    protected $_em = array();
+    protected $_em = [];
 
     /**
      * If true, try to use sqlparse to prettify queries
@@ -40,7 +40,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      * @param array $options
      *
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (isset($options['entityManagers'])) {
             $this->_em = $options['entityManagers'];
@@ -84,7 +84,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
             }
         }
 
-        $adapterInfo = array();
+        $adapterInfo = [];
 
         foreach ($this->_em as $em) {
             if ($logger = $em->getConnection()->getConfiguration()->getSqlLogger()) {
@@ -143,10 +143,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
         foreach ($logger->queries as $query) {
             $queries .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', round($query['executionMS'] * 1000, 2)) . 'ms</td>' . PHP_EOL . '<td>';
 
-            $params = array();
+            $params = [];
             if (!empty($query['params'])) {
                 $params = $query['params'];
-                array_walk($params, array( $this, '_addQuotes' ));
+                array_walk($params, [ $this, '_addQuotes' ]);
             }
             $paramCount = count($params);
 

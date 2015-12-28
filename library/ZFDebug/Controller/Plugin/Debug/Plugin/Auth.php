@@ -58,7 +58,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
      *
      * @var array
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->_auth = Zend_Auth::getInstance();
         if (isset($options['user'])) {
