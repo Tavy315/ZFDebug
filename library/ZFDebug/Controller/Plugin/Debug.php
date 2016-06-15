@@ -56,7 +56,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @var string
      */
-    protected $_version = '1.6.4';
+    protected $_version = '1.6.5';
 
     /**
      * Creates a new instance of the Debug Bar
