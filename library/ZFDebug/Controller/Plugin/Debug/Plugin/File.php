@@ -52,7 +52,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File extends ZFDebug_Controller_Plu
      *
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = [ ])
     {
         isset($options['base_path']) || $options['base_path'] = $_SERVER['DOCUMENT_ROOT'];
         isset($options['library']) || $options['library'] = null;
@@ -108,9 +108,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File extends ZFDebug_Controller_Plu
         }
         $html .= round($size / 1024, 1) . 'K</h4>';
 
-        // $html .= 'Basepath: ' . $this->_basePath .$linebreak;
-
-        $libraryFiles = [];
+        $libraryFiles = [ ];
         foreach ($this->_library as $key => $value) {
             if ('' != $value) {
                 $libraryFiles[$key] = '<h4>' . $value . ' Files</h4>';

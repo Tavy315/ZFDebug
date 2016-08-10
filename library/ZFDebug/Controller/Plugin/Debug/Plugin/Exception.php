@@ -32,7 +32,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @var array
      */
-    public static $errors = [];
+    public static $errors = [ ];
 
     protected $_rendered = false;
 
@@ -82,45 +82,21 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
     {
         Zend_Controller_Front::getInstance()->registerPlugin($this);
 
-//        set_error_handler(array( $this, 'errorHandler' ));
         $this->_originalErrorHandler = set_error_handler([ $this, 'errorHandler' ]);
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
     public function getTab()
     {
-        /*
-        $response = Zend_Controller_Front::getInstance()->getResponse();
-        foreach ($response->getException() as $e) {
-            $exception = get_class($e) . ': ' . $e->getMessage()
-                       . ' thrown in ' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getFile())
-                       . ' on line ' . $e->getLine();
-            $exception .= '<ol>';
-            foreach ($e->getTrace() as $t) {
-                $func = $t['function'] . '()';
-                if (isset($t['class']))
-                    $func = $t['class'] . $t['type'] . $func;
-                if (! isset($t['file']))
-                    $t['file'] = 'unknown';
-                if (! isset($t['line']))
-                    $t['line'] = 'n/a';
-                $exception .= '<li>' . $func . ' in '
-                       . str_replace($_SERVER['DOCUMENT_ROOT'], '', $t['file'])
-                       . ' on line ' . $t['line'] . '</li>';
-            }
-            $exception .= '</ol>';
-            if ($logger = self::getLogger())
-                $logger->crit($exception);
-        }*/
         return '';
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */
@@ -181,10 +157,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
             str_replace($_SERVER['DOCUMENT_ROOT'], '', $file),
             $line
         );
-
-        /*if (ini_get('log_errors')) {
-            error_log(sprintf("%s: %s", $type, $message));
-        }*/
 
         if (($logger = self::getLogger())) {
             $logger->$method($message);

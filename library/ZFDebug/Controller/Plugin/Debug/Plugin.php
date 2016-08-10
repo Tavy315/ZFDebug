@@ -62,7 +62,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
         if (is_array($values)) {
             ksort($values);
         }
+
         $retVal = '<div class="pre">';
+
         foreach ($values as $key => $value) {
             $key = htmlspecialchars($key);
             if (is_numeric($value)) {
@@ -70,7 +72,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
             } elseif (is_string($value)) {
                 $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
             } elseif (is_array($value)) {
-                // $retVal .= $key . ' => ' . self::_cleanData($value);
                 $retVal .= '<a href="#" style="text-decoration:none" class="arrayexpandcollapse">&plusmn;&nbsp;' . $key . '</a> => ' . self::_cleanData($value) . '<br />';
             } elseif (is_object($value)) {
                 $retVal .= $key . ' => ' . get_class($value) . ' Object()' . $linebreak;

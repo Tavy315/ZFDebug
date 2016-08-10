@@ -112,7 +112,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
 
         $html = '<h4>Database queries';
 
-        // @TODO: This is always on?
+        // @todo: This is always on?
         if (Zend_Db_Table_Abstract::getDefaultMetadataCache()) {
             $html .= ' – Metadata cache ENABLED';
         } else {
@@ -172,7 +172,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                             }
                             $explainData['Rows'] = $explain['rows'];
 
-                            $explainEnd = end($explainData);
                             foreach ($explainData as $key => $value) {
                                 $html .= "$key: <span style='color:#ffb13e'>$value</span><br>\n";
                             }

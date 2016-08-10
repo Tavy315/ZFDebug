@@ -16,7 +16,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @var array
      */
-    protected $_plugins = [];
+    protected $_plugins = [ ];
 
     /**
      * Contains options to change Debug Bar behavior
@@ -92,7 +92,6 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
                 ->setTab($this->_getVersionTab())
                 ->setIdentifier('copyright')
                 ->setIconData('');
-        // ->setIconData('data:image/gif;base64,R0lGODlhEAAQAPcAAPb7/ef2+VepAGKzAIC8SavSiYS9Stvt0uTx4fX6+ur1632+QMLgrGOuApDIZO738drs0Ofz5t7v2MfjtPP6+t7v12SzAcvnyX2+PaPRhH2+Qmy3H3K5LPP6+cXkwIHAR2+4JHi7NePz8YC/Rc3ozfH49XK5KXq9OrzdpNzu1YrEUqrVkdzw5uTw4d/v2dDow5zOeO3279Hq0m+4JqrUhpnMbeHw3N3w6Mflwm22HmazBODy7tfu3un06r7gsuXy4sTisIzGXvH59ny9PdPr1rXZpMzlu36/Q5bLb+Pw3tDnxNHr1Lfbm+b199/x62q1Fp3NcdjszqTPh/L599vt04/GWmazCPb7/LHZnW63I3W6MXa7MmGuAt/y7Gq1E2m0Eb7cp9frzZLJaO/489bu3HW3N7rerN/v2q7WjIjEVuLx343FVrDXj9nt0cTjvW2zIoPBSNjv4OT09IXDUpvLeeHw3dPqyNLpxs/nwHe8OIvFWrPaoGe0C5zMb83mvHm8Oen06a3Xl9XqyoC/Qr/htWe0DofDU4nFWbPYk7ndqZ/PfYPBTMPhrqHRgoLBSujz55PKadHpxfX6+6LNeqPQfNXt2pPIYH2+O7vcoHi4OOf2+PL5+NTs2N3u1mi1E7XZl4zEVJjLaZHGauby5KTShmSzBO/38s/oz3i7MtbrzMHiuYTCT4fDTtXqye327uDv3JDHXu328JnMcu738LLanvD49ZTJYpPKauX19tvv44jBWo7GWpfKZ+Dv27XcpcrluXu8ONTs16zXleT08qfUjKzUlc7pzm63HaTRfZXKZuj06HG4KavViGe0EcDfqcjmxaDQgZrNdOHz77/ep4/HYL3esnW6LobCS3S5K57OctDp0JXKbez17N7x6cbkwLTZlbXXmLrcnrvdodHr06PQe8jkt5jIa93v13m8OI7CW3O6L3a7Nb7gs6nUjmu2GqjTgZjKaKLQeZnMc4LAReL08rTbopbLbuTx4KDOdtbry7DYmrvfrrPaoXK5K5zOegAAACH5BAEAAAAALAAAAAAQABAAAAhMAAEIHEiwoMGDCBMOlCKgoUMuHghInEiggEOHAC5eJNhQ4UAuAjwIJLCR4AEBDQS2uHiAYLGOHjNqlCmgYAONApQ0jBGzp8+fQH8GBAA7');
         $this->registerPlugin($version);
 
         /**
@@ -125,7 +124,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @return ZFDebug_Controller_Plugin_Debug
      */
-    public function setOptions(array $options = [])
+    public function setOptions(array $options = [ ])
     {
         if (isset($options['image_path'])) {
             $this->_options['image_path'] = $options['image_path'];
@@ -182,7 +181,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
      *
      * @param string $identifier
      *
-     * @return ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+     * @return bool|ZFDebug_Controller_Plugin_Debug_Plugin_Interface
      */
     public function getPlugin($identifier)
     {
@@ -215,10 +214,10 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
 
         $html = '';
 
-        $html .= "<div id='ZFDebug_info'>\n";
-        $html .= "\t<span class='ZFDebug_span' style='padding-right:0px;' onclick='ZFDebugPanel(ZFDebugCurrent);'>
-            <img style='vertical-align:middle;' src='" . $this->_icon('close') . "'>&nbsp;
-        </span>\n";
+        $html .= '<div id="ZFDebug_info">' . PHP_EOL
+            . '<span class="ZFDebug_span" style="padding-right:0;" onclick="ZFDebugPanel(ZFDebugCurrent);">'
+            . '<img style="vertical-align:middle;" src="' . $this->_icon('close') . '">'
+            . '</span>' . PHP_EOL;
 
         /**
          * Creating panel content for all registered plugins
@@ -239,22 +238,22 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
             $showPanel = ($plugin->getPanel() == '') ? 'log' : $plugin->getIdentifier();
             $html .= "\t" . '<span id="ZFDebugInfo_' . $plugin->getIdentifier()
                 . '" class="ZFDebug_span clickable" onclick="ZFDebugPanel(\'ZFDebug_'
-                . $showPanel . '\');">' . "\n";
+                . $showPanel . '\');">' . PHP_EOL;
             if ($pluginIcon) {
                 $html .= "\t\t" . '<img src="' . $pluginIcon . '" style="vertical-align:middle" alt="'
                     . $plugin->getIdentifier() . '" title="'
-                    . $plugin->getIdentifier() . '"> ' . "\n";
+                    . $plugin->getIdentifier() . '"> ' . PHP_EOL;
             }
-            $html .= $tab . "</span>\n";
+            $html .= $tab . '</span>' . PHP_EOL;
         }
 
         $html .= '<span id="ZFDebugInfo_Request" class="ZFDebug_span">'
-            . "\n"
+            . PHP_EOL
             . round(memory_get_peak_usage() / 1024) . 'K in '
             . round((microtime(true) - $_SERVER['REQUEST_TIME']) * 1000) . 'ms'
-            . '</span>' . "\n";
+            . '</span>' . PHP_EOL;
 
-        $html .= "</div>\n";
+        $html .= '</div>' . PHP_EOL;
         $html .= '<div id="ZFDebugResize"></div>';
 
         /**
@@ -267,9 +266,9 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
                 continue;
             }
 
-            /* @var $plugin ZFDebug_Controller_Plugin_Debug_Plugin_Interface */
-            $html .= "\n" . '<div id="ZFDebug_' . $plugin->getIdentifier()
-                . '" class="ZFDebug_panel" name="ZFDebug_panel">' . "\n" . $panel . "\n</div>\n";
+            /** @var ZFDebug_Controller_Plugin_Debug_Plugin_Interface $plugin */
+            $html .= PHP_EOL . '<div id="ZFDebug_' . $plugin->getIdentifier() . '" class="ZFDebug_panel" name="ZFDebug_panel">'
+                . PHP_EOL . $panel . PHP_EOL . '</div>' . PHP_EOL;
         }
 
         $this->_output($html);
@@ -287,7 +286,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
             if (is_numeric($plugin)) {
                 # Plugin passed as array value instead of key
                 $plugin = $options;
-                $options = [];
+                $options = [ ];
             }
 
             // Register an instance
@@ -326,7 +325,6 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
     protected function _getVersionTab()
     {
         return '<strong>ZFDebug</strong>';
-        // return ' ' . Zend_Version::VERSION . '/'.phpversion();
     }
 
     /**
@@ -338,22 +336,15 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
     {
         $panel = "<h4>ZFDebug {$this->_version} - Zend Framework "
             . Zend_Version::VERSION . ' on PHP ' . phpversion() . "</h4>\n"
-            . "<!-- <p>&copy;2008-2015 <a href='http://jokke.dk'>Joakim Nygård</a>" . $this->getLinebreak()
-            . "with contributions by <a href='http://www.bangal.de'>Andreas Pankratz</a> and others</p>"
-            . "<p>The project is hosted at <a href='https://github.com/jokkedk/ZFDebug'>https://github.com/jokkedk/ZFDebug</a>"
-            . ' and released under the BSD License' . $this->getLinebreak()
-            . "Includes images from the <a href='http://www.famfamfam.com/lab/icons/silk/'>Silk Icon set</a> by Mark James</p> -->"
             . '<p>Disable ZFDebug temporarily by sending ZFDEBUG_DISABLE as a GET/POST parameter</p>';
-//        $panel .= '<h4>Zend Framework ' . Zend_Version::VERSION . ' / PHP ' . phpversion() . ' with extensions:</h4>';
-//        $extensions = get_loaded_extensions();
-//        natcasesort($extensions);
-//        $panel .= implode('<br>', $extensions);
 
         return $panel;
     }
 
     /**
      * Returns path to the specific icon
+     *
+     * @param string $kind
      *
      * @return string
      */
@@ -402,15 +393,15 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
     protected function _headerOutput()
     {
         $collapsed = isset($_COOKIE['ZFDebugCollapsed']) ? $_COOKIE['ZFDebugCollapsed'] : '';
-        $boxheight = ($collapsed ? (isset($_COOKIE['ZFDebugHeight']) ? $_COOKIE['ZFDebugHeight'] : '240') : 32);
+        $boxHeight = ($collapsed ? (isset($_COOKIE['ZFDebugHeight']) ? $_COOKIE['ZFDebugHeight'] : '240') : 32);
 
         return ('
 	    <style type="text/css" media="print">#ZFDebug_offset, #ZFDebug {display: none;}</style>
 	    <style type="text/css" media="screen">
 	        html,body {height:100%}
 	        #ZFDebug, #ZFDebug div, #ZFDebug span, #ZFDebug h1, #ZFDebug h2, #ZFDebug h3, #ZFDebug h4, #ZFDebug h5, #ZFDebug h6, #ZFDebug p, #ZFDebug blockquote, #ZFDebug pre, #ZFDebug a, #ZFDebug code, #ZFDebug em, #ZFDebug img, #ZFDebug strong, #ZFDebug dl, #ZFDebug dt, #ZFDebug dd, #ZFDebug ol, #ZFDebug ul, #ZFDebug li, #ZFDebug table, #ZFDebug tbody, #ZFDebug tfoot, #ZFDebug thead, #ZFDebug tr, #ZFDebug th, #ZFDebug td {margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;}
-	        #ZFDebug_offset {height:' . $boxheight . 'px;}
-	        #ZFDebug {height:' . $boxheight . 'px;width:100%;background:#262626;font: 12px/1.4em Lucida Grande, Lucida Sans Unicode, sans-serif;position:fixed;bottom:0px;left:0px; color:#FFF; background:#000000; z-index:2718281828459045;}
+	        #ZFDebug_offset {height:' . $boxHeight . 'px;}
+	        #ZFDebug {height:' . $boxHeight . 'px;width:100%;font: 12px/1.4em Lucida Grande, Lucida Sans Unicode, sans-serif;position:fixed;bottom:0px;left:0px; color:#FFF; background:#000; z-index:2718281828459045;}
 	        #ZFDebug p {margin:1em 0;}
 	        #ZFDebug a {color:#fff;}
 	        #ZFDebug tr {color:#fff;}
@@ -421,7 +412,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
 	        #ZFDebug #ZFDebug_info {display:block;height:32px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAyCAMAAABSxbpPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACFQTFRFFhYWIyMjGhoaHBwcJSUlExMTFBQUHx8fISEhGBgYJiYmWIZXxwAAAC5JREFUeNrsxskNACAMwLBAucr+A/OLWAEJv0wXQ1xSVBFiiiWKaGLr96EeAQYA2KMRY8RL/qEAAAAASUVORK5CYII=);}
 	        #ZFDebug #ZFDebugResize {cursor:row-resize;height:1px;border-top:1px solid #1a1a1a;border-bottom:1px solid #333;}
 	        #ZFDebug .ZFDebug_span {padding:0 15px;line-height:32px;display:block;float:left;}
-	        #ZFDebug .ZFDebug_panel {padding:0px 15px 15px; font: 11px/1.4em Menlo, Monaco, Lucida Console, monospace;text-align:left;height:' . ($boxheight - 50) . 'px;overflow:auto;display:none;}
+	        #ZFDebug .ZFDebug_panel {padding:0px 15px 15px; font: 11px/1.4em Menlo, Monaco, Lucida Console, monospace;text-align:left;height:' . ($boxHeight - 50) . 'px;overflow:auto;display:none;}
 	        #ZFDebug h4 {font:bold 12px/1.4em Menlo, Monaco, Lucida Console, monospace; margin:1em 0;}
 	        #ZFDebug .ZFDebug_active {background:#1a1a1a;}
 	        #ZFDebug .ZFDebug_panel .pre {margin:0 0 0 22px;}
@@ -505,7 +496,6 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
     {
         $html = "<div id='ZFDebug_offset'></div>\n<div id='ZFDebug'>\n$html\n</div>\n</body>";
         $response = $this->getResponse();
-        // $response->setBody(preg_replace('/(<\/head>)/i', $this->_headerOutput() . '$1', $response->getBody()));
         $response->setBody(str_ireplace('</body>', $this->_headerOutput() . $html, $response->getBody()));
     }
 
