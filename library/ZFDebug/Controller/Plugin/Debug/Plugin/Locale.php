@@ -16,30 +16,30 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
      *
      * @var string
      */
-    protected $_identifier = 'locale';
+    protected $identifier = 'locale';
 
     /**
      * @var Zend_Controller_Request_Abstract
      */
-    protected $_request;
+    protected $request;
 
     /**
      * Callback function to clear the cache
      *
      * @var string
      */
-    protected $_callback;
+    protected $callback;
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
      *
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = [ ])
     {
         if (isset($options['callback']) && is_callable($options['callback'])) {
-            $this->_callback = $options['callback'];
-            call_user_func($this->_callback);
+            $this->callback = $options['callback'];
+            call_user_func($this->callback);
         }
     }
 
@@ -50,7 +50,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -74,7 +74,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
     }
 
     /**
-     * Gets content panel for the DebugBar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */
@@ -85,7 +85,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
         if (Zend_Registry::isRegistered('Zend_Locale')) {
             $html .= 'Zend Locale is set to <strong>' . Zend_Registry::get('Zend_Locale') . '</strong>' . $linebreak;
             $html .= '<h4>Change Locale</h4>' . $linebreak;
-            $html .= '<form method="post"><input name="debug_locale" type="text" placeholder="Locale..." class="input-small"></input></form>';
+            $html .= '<form method="post"><input name="debug_locale" type="text" placeholder="Locale..." class="input-small" /></form>';
         } else {
             $html .= 'No Zend_Locale available.';
         }

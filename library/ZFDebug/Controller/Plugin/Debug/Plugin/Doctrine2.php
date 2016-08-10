@@ -16,14 +16,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      *
      * @var string
      */
-    protected $_identifier = 'doctrine2';
+    protected $identifier = 'doctrine2';
 
     /**
      * Contains entityManagers
      *
      * @var array
      */
-    protected $_em = [];
+    protected $em = [ ];
 
     /**
      * If true, try to use sqlparse to prettify queries
@@ -32,7 +32,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      * @see http://code.google.com/p/python-sqlparse/
      * @var bool
      */
-    public static $_sqlParseEnabled = false;
+    public static $sqlParseEnabled = false;
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
@@ -40,10 +40,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      * @param array $options
      *
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = [ ])
     {
         if (isset($options['entityManagers'])) {
-            $this->_em = $options['entityManagers'];
+            $this->em = $options['entityManagers'];
         }
     }
 
@@ -64,7 +64,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -74,19 +74,19 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      */
     public function getTab()
     {
-        if (!is_array($this->_em) || !count($this->_em)) {
+        if (!is_array($this->em) || !count($this->em)) {
             return 'No entitymanagers available';
         } else {
-            foreach ($this->_em as $em) {
+            foreach ($this->em as $em) {
                 if (!$em instanceof \Doctrine\ORM\EntityManager) {
                     return "the entitymanager you passed is not an instance of \Doctrine\\ORM\\EntityManager";
                 }
             }
         }
 
-        $adapterInfo = [];
+        $adapterInfo = [ ];
 
-        foreach ($this->_em as $em) {
+        foreach ($this->em as $em) {
             if ($logger = $em->getConnection()->getConfiguration()->getSqlLogger()) {
                 $totalTime = 0;
                 foreach ($logger->queries as $query) {
@@ -111,14 +111,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      */
     public function getPanel()
     {
-        if (!$this->_em) {
+        if (!$this->em) {
             return '';
         }
 
-        $html = '<h4>Doctrine2 queries - Doctrine2 (Common v' . Doctrine\Common\Version::VERSION . ' | DBAL v' . Doctrine\DBAL\Version::VERSION . ' | ORM v' .
-            Doctrine\ORM\Version::VERSION . ')</h4>';
+        $html = '<h4>Doctrine2 queries - Doctrine2 (Common v' . Doctrine\Common\Version::VERSION
+            . ' | DBAL v' . Doctrine\DBAL\Version::VERSION
+            . ' | ORM v' . Doctrine\ORM\Version::VERSION . ')</h4>';
 
-        foreach ($this->_em as $name => $em) {
+        foreach ($this->em as $name => $em) {
             $html .= '<h4>EntityManager ' . $name . '</h4>';
             if ($logger = $em->getConnection()->getConfiguration()->getSqlLogger()) {
                 $html .= $this->getProfile($logger);
@@ -143,10 +144,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
         foreach ($logger->queries as $query) {
             $queries .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', round($query['executionMS'] * 1000, 2)) . 'ms</td>' . PHP_EOL . '<td>';
 
-            $params = [];
+            $params = [ ];
             if (!empty($query['params'])) {
                 $params = $query['params'];
-                array_walk($params, [ $this, '_addQuotes' ]);
+                array_walk($params, [ $this, 'addQuotes' ]);
             }
             $paramCount = count($params);
 
@@ -156,7 +157,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
                 $qry = htmlspecialchars($query['sql']);
             }
 
-            if (self::$_sqlParseEnabled) {
+            if (self::$sqlParseEnabled) {
                 $qry = self::prettifySql($qry);
             }
 
@@ -185,7 +186,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      * @param mixed $key
      *
      */
-    protected function _addQuotes(&$value, $key)
+    protected function addQuotes(&$value, $key)
     {
         if (is_scalar($value)) {
             $value = "'" . $value . "'";

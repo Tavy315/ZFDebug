@@ -16,7 +16,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
      *
      * @var string
      */
-    protected $_identifier = 'html';
+    protected $identifier = 'html';
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Html
@@ -32,7 +32,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -46,7 +46,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
     }
 
     /**
-     * Gets menu tab for the DebugBar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
@@ -56,7 +56,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
     }
 
     /**
-     * Gets content panel for the DebugBar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */

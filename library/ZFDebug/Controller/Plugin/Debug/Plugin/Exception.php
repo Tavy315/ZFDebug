@@ -18,14 +18,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @var string
      */
-    protected $_identifier = 'exception';
+    protected $identifier = 'exception';
 
     /**
      * Original error handler
      *
      * @var callable
      */
-    protected $_originalErrorHandler = null;
+    protected $originalErrorHandler = null;
 
     /**
      * Contains any errors
@@ -34,12 +34,12 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      */
     public static $errors = [ ];
 
-    protected $_rendered = false;
+    protected $rendered = false;
 
     /**
      * Get the ZFDebug logger
      *
-     * @return Zend_Log
+     * @return bool|Zend_Log
      */
     public static function getLogger()
     {
@@ -61,7 +61,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -82,7 +82,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
     {
         Zend_Controller_Front::getInstance()->registerPlugin($this);
 
-        $this->_originalErrorHandler = set_error_handler([ $this, 'errorHandler' ]);
+        $this->originalErrorHandler = set_error_handler([ $this, 'errorHandler' ]);
     }
 
     /**
@@ -102,7 +102,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      */
     public function getPanel()
     {
-        $this->_rendered = true;
+        $this->rendered = true;
 
         return '';
     }
@@ -162,8 +162,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
             $logger->$method($message);
         }
 
-        if ($this->_originalErrorHandler) {
-            return call_user_func_array($this->_originalErrorHandler, func_get_args());
+        if ($this->originalErrorHandler) {
+            return call_user_func_array($this->originalErrorHandler, func_get_args());
         }
 
         return false;
@@ -223,7 +223,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      * Defined by Zend_Controller_Plugin_Abstract
      *
      * @param Zend_Controller_Request_Abstract
-     *
      */
     public function dispatchLoopShutdown()
     {

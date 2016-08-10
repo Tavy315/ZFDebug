@@ -17,10 +17,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Only enable zfdebug if options have been specified for it
         if ($this->hasOption('zfdebug')) {
             // Create ZFDebug instance
-            $zfdebug = new ZFDebug_Controller_Plugin_Debug($this->getOption('zfdebug'));
+            $zfDebug = new ZFDebug_Controller_Plugin_Debug($this->getOption('zfdebug'));
 
             // Register ZFDebug with the front controller
-            $front->registerPlugin($zfdebug);
+            $front->registerPlugin($zfDebug);
         }
         // In application.ini do the following:
         // 
@@ -32,22 +32,24 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         // Plugins that take objects as parameters like Database and Cache
         // need to be registered manually:
-
-        // $zfdebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Database($db));
+        $zfDebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Database($db));
 
         // Alternative configuration without application.ini
-        // $options = array(
-        //     'plugins' => array('variables', 'database', 
-        //                        'file' => array('basePath' => '/Library/WebServer/Documents/budget', 'myLibrary' => 'Scienta'),
-        //                        'memory', 'time', 'registry', 
-        //                        //'auth',
-        //                        //'cache' => array('backend' => $cache->getBackend()), 
-        //                        'exception')
-        // );
-        // $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);
+        $options = [
+            'plugins' => [
+                'variables',
+                'database',
+                'file' => [ 'basePath' => '/Library/WebServer/Documents/budget', 'myLibrary' => 'Scienta' ],
+                'memory',
+                'time',
+                'registry',
+                //'auth',
+                //'cache' => array('backend' => $cache->getBackend()),
+                'exception',
+            ],
+        ];
+        $zfDebug = new ZFDebug_Controller_Plugin_Debug($options);
         // Register ZFDebug with the front controller
-        // $front->registerPlugin($zfdebug);
+        $front->registerPlugin($zfDebug);
     }
-
 }
-

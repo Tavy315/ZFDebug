@@ -11,8 +11,8 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_Abstract
 {
-    protected $_messages = [ ];
-    protected $_errors = 0;
+    protected $messages = [ ];
+    protected $errors = 0;
 
     public static function factory($config)
     {
@@ -21,12 +21,12 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
 
     public function getMessages()
     {
-        return $this->_messages;
+        return $this->messages;
     }
 
     public function getErrorCount()
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
     /**
@@ -51,7 +51,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
         }
         if ($event['priority'] < 5) {
             $event['color'] = 'red';
-            $this->_errors++;
+            $this->errors++;
         }
 
         if ($event['priority'] == ZFDebug_Controller_Plugin_Debug_Plugin_Log::ZFLOG) {
@@ -73,6 +73,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
             }
             $output = str_replace("%$name%", $value, $output);
         }
-        $this->_messages[] = $output;
+        $this->messages[] = $output;
     }
 }

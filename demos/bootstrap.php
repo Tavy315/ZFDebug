@@ -25,8 +25,8 @@ $debug = new ZFDebug_Controller_Plugin_Debug($options);
 $frontController->registerPlugin($debug);
 
 // Alternative registration of plugins, also possible elsewhere in dispatch process
-// $zfdebug = Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug');
-// $zfdebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Database($optionsArray));
+$zfDebug = Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug');
+$zfDebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Database($optionsArray));
 
 /**
  * Registering other plugins and start dispatch

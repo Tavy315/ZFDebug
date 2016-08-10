@@ -16,18 +16,17 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
      *
      * @var string
      */
-    protected $_identifier = 'doctrine1';
+    protected $identifier = 'doctrine1';
 
     /**
-     *
-     * @var Doctrine_Connection_Profiler
+     * @var \Doctrine_Connection_Profiler
      */
-    protected $_profiler = null;
+    protected $profiler = null;
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Dprofiler
      *
-     * @param Zend_Db_Adapter_Abstract|array $adapters
+     * @param null|\Doctrine_Connection_Profiler $profiler
      *
      * @author Paulius Petronis <paulius@art21.lt>
      */
@@ -38,45 +37,45 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
             $conn = Doctrine_Manager::connection();
             $conn->setListener($profiler);
         }
-        $this->_profiler = $profiler;
+        $this->profiler = $profiler;
     }
 
     /**
-     * Gets menu tab for the DebugBar
+     * Gets menu tab for the Debug Bar
      *
      * @author Paulius Petronis <paulius@art21.lt>
      * @return string
      */
     public function getTab()
     {
-        if (!$this->_profiler) {
+        if (!$this->profiler) {
             return 'No profiler';
         }
 
         $time = 0;
-        foreach ($this->_profiler as $event) {
+        foreach ($this->profiler as $event) {
             $time += $event->getElapsedSecs();
         }
-        $html = 'Query: ' . $this->_profiler->count() . ' in ' . round($time * 1000, 2) . ' ms';
+        $html = 'Query: ' . $this->profiler->count() . ' in ' . round($time * 1000, 2) . ' ms';
 
         return $html;
     }
 
     /**
-     * Gets content panel for the DebugBar
+     * Gets content panel for the Debug Bar
      *
      * @author Paulius Petronis <paulius@art21.lt>
      * @return string
      */
     public function getPanel()
     {
-        if (!$this->_profiler) {
+        if (!$this->profiler) {
             return '';
         }
 
         $html = '<h4>Database queries</h4>';
         $html .= '<ol>';
-        foreach ($this->_profiler as $event) {
+        foreach ($this->profiler as $event) {
             $html .= '<li><strong>' . $event->getName() . ' ' . sprintf('%f', $event->getElapsedSecs()) . '</strong><br/>';
             $html .= $event->getQuery() . '<br />';
             $params = $event->getParams();
@@ -103,6 +102,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 }

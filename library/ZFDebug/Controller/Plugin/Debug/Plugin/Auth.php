@@ -16,42 +16,42 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
      *
      * @var string
      */
-    protected $_identifier = 'auth';
+    protected $identifier = 'auth';
 
     /**
      * Contains Zend_Auth object
      *
      * @var Zend_Auth
      */
-    protected $_auth;
+    protected $auth;
 
     /**
      * Contains "column name" for the username
      *
      * @var string
      */
-    protected $_user = 'user';
+    protected $user = 'user';
 
     /**
      * Contains "column name" for the role
      *
      * @var string
      */
-    protected $_role = 'role';
+    protected $role = 'role';
 
     /**
      * Function to get real world value for the user name
      *
      * @var string
      */
-    protected $_callback = null;
+    protected $callback = null;
 
     /**
-     * Contains Acls for this application
+     * Contains ACL rules for this application
      *
      * @var Zend_Acl
      */
-    protected $_acl;
+    protected $acl;
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Auth
@@ -60,17 +60,17 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
      */
     public function __construct(array $options = [])
     {
-        $this->_auth = Zend_Auth::getInstance();
+        $this->auth = Zend_Auth::getInstance();
         if (isset($options['user'])) {
-            $this->_user = $options['user'];
+            $this->user = $options['user'];
         }
 
         if (isset($options['role'])) {
-            $this->_role = $options['role'];
+            $this->role = $options['role'];
         }
 
         if (isset($options['callback']) && is_callable($options['callback'])) {
-            $this->_callback = $options['callback'];
+            $this->callback = $options['callback'];
         }
     }
 
@@ -81,7 +81,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -96,45 +96,45 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
     public function getTab()
     {
-        if (!$this->_auth->hasIdentity()) {
+        if (!$this->auth->hasIdentity()) {
             return 'Not authorized';
         }
 
-        $identity = $this->_auth->getIdentity();
+        $identity = $this->auth->getIdentity();
 
         if (is_object($identity)) {
-            $username = $this->_auth->getIdentity()->{$this->_user};
-            $role = $this->_auth->getIdentity()->{$this->_role};
+            $username = $this->auth->getIdentity()->{$this->user};
+            $role = $this->auth->getIdentity()->{$this->role};
         } else {
-            $username = $this->_auth->getIdentity();
+            $username = $this->auth->getIdentity();
             $role = '';
         }
 
-        if (!empty($this->_callback) && is_callable($this->_callback)) {
-            $username = call_user_func($this->_callback, $username);
+        if (!empty($this->callback) && is_callable($this->callback)) {
+            $username = call_user_func($this->callback, $username);
         }
 
         return $username . ' (' . $role . ')';
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */
     public function getPanel()
     {
-        if (!$this->_auth->hasIdentity()) {
+        if (!$this->auth->hasIdentity()) {
             $html = '<h4>No identity</h4>';
         } else {
             $html = '<h4>Identity</h4>';
-            $html .= $this->_cleanData($this->_auth->getIdentity());
+            $html .= $this->_cleanData($this->auth->getIdentity());
         }
 
         return $html;

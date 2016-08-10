@@ -16,7 +16,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
      *
      * @var string
      */
-    protected $_identifier = 'session';
+    protected $identifier = 'session';
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
@@ -32,7 +32,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -63,10 +63,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
      */
     public function getPanel()
     {
-        $vars = '<div style="width:50%;float:left;">';
-        $vars .= '<h4>Session</h4>';
-        $vars .= '<div id="ZFDebug_session" style="margin-left:-22px">' . $this->_cleanData($_SESSION) . '</div>';
-        $vars .= '</div><div style="clear:both">&nbsp;</div>';
+        $vars = '<div style="width:50%;float:left;">'
+            . '<h4>Session</h4>'
+            . '<div id="ZFDebug_session" style="margin-left:-22px">' . $this->_cleanData($_SESSION) . '</div>'
+            . '</div><div style="clear:both">&nbsp;</div>';
 
         return $vars;
     }
@@ -85,7 +85,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
         if (is_array($values)) {
             ksort($values);
         }
+
         $retVal = '<div class="pre">';
+        
         foreach ($values as $key => $value) {
             $key = htmlspecialchars($key);
             if (is_numeric($value)) {
@@ -96,7 +98,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
                 $retVal .= $key . ' => Array' . $linebreak;
                 $retVal .= self::_cleanData($value);
             } elseif (is_object($value)) {
-                $array = [];
+                $array = [ ];
                 foreach ($value as $member => $data) {
                     $array[$member] = $data;
                 }

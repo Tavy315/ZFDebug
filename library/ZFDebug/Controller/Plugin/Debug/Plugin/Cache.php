@@ -16,45 +16,42 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
      *
      * @var string
      */
-    protected $_identifier = 'cache';
+    protected $identifier = 'cache';
 
     /**
      * @var Zend_Cache_Backend_ExtendedInterface
      */
-    protected $_cacheBackends = [];
+    protected $cacheBackends = [ ];
 
     /**
      * @var callable
      */
-    protected $_callback = [];
+    protected $callback = [ ];
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Cache
      *
-     * @param  array          $options
+     * @param  array $options
+     *
      * @throws Zend_Exception
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = [ ])
     {
         if (!isset($options['backend'])) {
             throw new Zend_Exception("ZFDebug: Cache plugin needs 'backend' parameter");
         }
 
-//        if (is_string($options['backend'])) {
-//            $options['backend'] = \Zend_Registry::get($options['backend']);
-//        }
-
         is_array($options['backend']) || $options['backend'] = [ $options['backend'] ];
 
         foreach ($options['backend'] as $name => $backend) {
             if ($backend instanceof Zend_Cache_Backend_ExtendedInterface) {
-                $this->_cacheBackends[$name] = $backend;
+                $this->cacheBackends[$name] = $backend;
             }
         }
 
         if (isset($options['callback']) && is_callable($options['callback'])) {
-            $this->_callback = $options['callback'];
-            call_user_func($this->_callback);
+            $this->callback = $options['callback'];
+            call_user_func($this->callback);
         }
     }
 
@@ -65,7 +62,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -142,7 +139,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
         }
 
         /** @var Zend_Cache_Backend_ExtendedInterface $backend */
-        foreach ($this->_cacheBackends as $name => $backend) {
+        foreach ($this->cacheBackends as $name => $backend) {
             $fillingPercentage = $backend->getFillingPercentage();
             $ids = $backend->getIds();
 

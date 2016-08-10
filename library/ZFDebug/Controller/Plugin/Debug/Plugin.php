@@ -11,7 +11,7 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin
 {
-    protected $_closingBracket = null;
+    protected $closingBracket = null;
 
     public function getLinebreak()
     {
@@ -25,15 +25,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
 
     public function getClosingBracket()
     {
-        if (!$this->_closingBracket) {
+        if (!$this->closingBracket) {
             if ($this->_isXhtml()) {
-                $this->_closingBracket = ' />';
+                $this->closingBracket = ' />';
             } else {
-                $this->_closingBracket = '>';
+                $this->closingBracket = '>';
             }
         }
 
-        return $this->_closingBracket;
+        return $this->closingBracket;
     }
 
     protected function _isXhtml()

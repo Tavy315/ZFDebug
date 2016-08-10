@@ -16,43 +16,43 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
      *
      * @var string
      */
-    protected $_identifier = 'database';
+    protected $identifier = 'database';
 
     /**
      * @var array
      */
-    protected $_db = [];
+    protected $db = [ ];
 
-    protected $_explain = false;
+    protected $explain = false;
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
      *
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = [ ])
     {
         if (!isset($options['adapter']) || !count($options['adapter'])) {
             if (Zend_Db_Table_Abstract::getDefaultAdapter()) {
                 $adapter = Zend_Db_Table_Abstract::getDefaultAdapter();
                 $adapter->getProfiler()->setEnabled(true);
-                $this->_db[0] = $adapter;
+                $this->db[0] = $adapter;
             }
         } elseif ($options['adapter'] instanceof Zend_Db_Adapter_Abstract) {
             $adapter = $options['adapter'];
             $adapter->getProfiler()->setEnabled(true);
-            $this->_db[0] = $adapter;
+            $this->db[0] = $adapter;
         } else {
             foreach ($options['adapter'] as $name => $adapter) {
                 if ($adapter instanceof Zend_Db_Adapter_Abstract) {
                     $adapter->getProfiler()->setEnabled(true);
-                    $this->_db[$name] = $adapter;
+                    $this->db[$name] = $adapter;
                 }
             }
         }
 
         if (isset($options['explain'])) {
-            $this->_explain = (bool) $options['explain'];
+            $this->explain = (bool) $options['explain'];
         }
     }
 
@@ -63,7 +63,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
      */
     public function getIdentifier()
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -83,14 +83,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
      */
     public function getTab()
     {
-        if (!$this->_db) {
+        if (!$this->db) {
             return 'No adapter';
         }
 
-        $adapterInfo = [];
+        $adapterInfo = [ ];
 
         /** @var Zend_Db_Adapter_Abstract $adapter */
-        foreach ($this->_db as $adapter) {
+        foreach ($this->db as $adapter) {
             $profiler = $adapter->getProfiler();
             $adapterInfo[] = $profiler->getTotalNumQueries() . ' in ' . round($profiler->getTotalElapsedSecs() * 1000, 2) . ' ms';
         }
@@ -106,13 +106,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
      */
     public function getPanel()
     {
-        if (!$this->_db) {
+        if (!$this->db) {
             return '';
         }
 
         $html = '<h4>Database queries';
 
-        // @todo: This is always on?
+        // This is probably always on
         if (Zend_Db_Table_Abstract::getDefaultMetadataCache()) {
             $html .= ' – Metadata cache ENABLED';
         } else {
@@ -131,10 +131,10 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
          * @var string                   $name
          * @var Zend_Db_Adapter_Abstract $adapter
          */
-        foreach ($this->_db as $name => $adapter) {
+        foreach ($this->db as $name => $adapter) {
             if ($profiles = $adapter->getProfiler()->getQueryProfiles()) {
                 $adapter->getProfiler()->setEnabled(false);
-                if (1 < count($this->_db)) {
+                if (1 < count($this->db)) {
                     $html .= '<h4>Adapter ' . $name . '</h4>';
                 }
                 $html .= '<table cellspacing="0" cellpadding="0" width="100%">';
@@ -144,7 +144,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                     $html .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', $profile->getElapsedSecs() * 1000) . 'ms</td>' . PHP_EOL . '<td>';
 
                     $params = $profile->getQueryParams();
-                    array_walk($params, [ $this, '_addQuotes' ]);
+                    array_walk($params, [ $this, 'addQuotes' ]);
                     $paramCount = count($params);
                     if ($paramCount) {
                         $html .= htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $profile->getQuery(), 1));
@@ -156,7 +156,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
                         $adapter instanceof Zend_Db_Adapter_Pdo_Mysql);
 
                     # Run explain if enabled, supported adapter and SELECT query
-                    if ($this->_explain && $supportedAdapter) {
+                    if ($this->explain && $supportedAdapter) {
                         $html .= '</td><td style="color:#7F7F7F;padding-left:2em;" nowrap>';
 
                         foreach ($adapter->fetchAll('EXPLAIN ' . $profile->getQuery()) as $explain) {
@@ -189,7 +189,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     }
 
     // For adding quotes to query params
-    protected function _addQuotes(&$value, $key)
+    protected function addQuotes(&$value, $key)
     {
         $value = "'" . $value . "'";
     }
