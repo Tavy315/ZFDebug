@@ -70,30 +70,30 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
         $this->request = Zend_Controller_Front::getInstance()->getRequest();
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         if ($viewRenderer->view && method_exists($viewRenderer->view, 'getVars')) {
-            $viewVars = $this->_cleanData($viewRenderer->view->getVars());
+            $viewVars = $this->cleanData($viewRenderer->view->getVars());
         } else {
             $viewVars = "No 'getVars()' method in view class";
         }
         $vars = '<div style="width:50%;float:left;">';
         $vars .= '<h4>View variables</h4>' . '<div id="ZFDebug_vars" style="margin-left:-22px">' . $viewVars . '</div>';
         $vars .= '</div><div style="width:45%;float:left;">';
-        $vars .= '<h4>Request parameters</h4>' . '<div id="ZFDebug_requests" style="margin-left:-22px">' . $this->_cleanData($this->request->getParams()) . '</div>';
+        $vars .= '<h4>Request parameters</h4>' . '<div id="ZFDebug_requests" style="margin-left:-22px">' . $this->cleanData($this->request->getParams()) . '</div>';
         if ($this->request->isPost()) {
-            $vars .= '<h4>Post variables</h4>' . '<div id="ZFDebug_post" style="margin-left:-22px">' . $this->_cleanData($this->request->getPost()) . '</div>';
+            $vars .= '<h4>Post variables</h4>' . '<div id="ZFDebug_post" style="margin-left:-22px">' . $this->cleanData($this->request->getPost()) . '</div>';
         }
 
         $vars .= '<h4>Constants</h4>';
         $constants = get_defined_constants(true);
         ksort($constants['user']);
-        $vars .= '<div id="ZFDebug_constants" style="margin-left:-22px">' . $this->_cleanData($constants['user']) . '</div>';
+        $vars .= '<div id="ZFDebug_constants" style="margin-left:-22px">' . $this->cleanData($constants['user']) . '</div>';
 
         $registry = Zend_Registry::getInstance();
         $vars .= '<h4>Zend Registry</h4>';
         $registry->ksort();
-        $vars .= '<div id="ZFDebug_registry" style="margin-left:-22px">' . $this->_cleanData($registry) . '</div>';
+        $vars .= '<div id="ZFDebug_registry" style="margin-left:-22px">' . $this->cleanData($registry) . '</div>';
 
         $cookies = $this->request->getCookie();
-        $vars .= '<h4>Cookies</h4>' . '<div id="ZFDebug_cookie" style="margin-left:-22px">' . $this->_cleanData($cookies) . '</div>';
+        $vars .= '<h4>Cookies</h4>' . '<div id="ZFDebug_cookie" style="margin-left:-22px">' . $this->cleanData($cookies) . '</div>';
 
         $vars .= '</div><div style="clear:both">&nbsp;</div>';
 

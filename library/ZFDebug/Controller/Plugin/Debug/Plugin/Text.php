@@ -102,7 +102,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Text implements ZFDebug_Controller_
     }
 
     /**
-     * Gets menu tab for the DebugBar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
@@ -112,7 +112,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Text implements ZFDebug_Controller_
     }
 
     /**
-     * Gets content panel for the DebugBar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */

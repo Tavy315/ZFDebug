@@ -11,7 +11,7 @@
  */
 class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_Plugin_Abstract implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
 {
-    protected static $_logger;
+    protected static $logger;
 
     /**
      * Contains plugin identifier name
@@ -43,15 +43,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      */
     public static function getLogger()
     {
-        if (!self::$_logger) {
-            if ($zfdebug = Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug')) {
-                self::$_logger = $zfdebug->getPlugin('Log')->getLog();
+        if (!self::$logger) {
+            if ($zfDebug = Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug')) {
+                self::$logger = $zfDebug->getPlugin('Log')->getLog();
             } else {
                 return false;
             }
         }
 
-        return self::$_logger;
+        return self::$logger;
     }
 
     /**

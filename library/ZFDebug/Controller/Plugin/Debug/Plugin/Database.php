@@ -77,7 +77,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     }
 
     /**
-     * Gets menu tab for the Debugbar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
@@ -100,7 +100,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Database extends ZFDebug_Controller
     }
 
     /**
-     * Gets content panel for the Debugbar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */

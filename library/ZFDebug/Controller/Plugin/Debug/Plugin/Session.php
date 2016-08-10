@@ -47,7 +47,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
     }
 
     /**
-     * Gets menu tab for the DebugBar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
@@ -57,7 +57,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
     }
 
     /**
-     * Gets content panel for the DebugBar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */
@@ -65,7 +65,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
     {
         $vars = '<div style="width:50%;float:left;">'
             . '<h4>Session</h4>'
-            . '<div id="ZFDebug_session" style="margin-left:-22px">' . $this->_cleanData($_SESSION) . '</div>'
+            . '<div id="ZFDebug_session" style="margin-left:-22px">' . $this->cleanData($_SESSION) . '</div>'
             . '</div><div style="clear:both">&nbsp;</div>';
 
         return $vars;
@@ -78,7 +78,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
      *
      * @return string
      */
-    protected function _cleanData($values)
+    protected function cleanData($values)
     {
         $linebreak = $this->getLinebreak();
 
@@ -87,7 +87,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
         }
 
         $retVal = '<div class="pre">';
-        
+
         foreach ($values as $key => $value) {
             $key = htmlspecialchars($key);
             if (is_numeric($value)) {
@@ -96,14 +96,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
                 $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
             } elseif (is_array($value)) {
                 $retVal .= $key . ' => Array' . $linebreak;
-                $retVal .= self::_cleanData($value);
+                $retVal .= self::cleanData($value);
             } elseif (is_object($value)) {
                 $array = [ ];
                 foreach ($value as $member => $data) {
                     $array[$member] = $data;
                 }
                 $retVal .= $key . ' => ' . get_class($value) . ' Object' . $linebreak;
-                $retVal .= self::_cleanData($array);
+                $retVal .= self::cleanData($array);
             } elseif (is_null($value)) {
                 $retVal .= $key . ' => NULL' . $linebreak;
             }

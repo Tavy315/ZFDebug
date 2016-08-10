@@ -26,7 +26,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
     public function getClosingBracket()
     {
         if (!$this->closingBracket) {
-            if ($this->_isXhtml()) {
+            if ($this->isXhtml()) {
                 $this->closingBracket = ' />';
             } else {
                 $this->closingBracket = '>';
@@ -36,7 +36,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
         return $this->closingBracket;
     }
 
-    protected function _isXhtml()
+    protected function isXhtml()
     {
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         /** @see Zend_View_Helper_Doctype::doctype() */
@@ -55,7 +55,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
      *
      * @return string
      */
-    protected function _cleanData($values)
+    protected function cleanData($values)
     {
         $linebreak = $this->getLinebreak();
 
@@ -72,7 +72,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
             } elseif (is_string($value)) {
                 $retVal .= $key . ' => \'' . htmlspecialchars($value) . '\'' . $linebreak;
             } elseif (is_array($value)) {
-                $retVal .= '<a href="#" style="text-decoration:none" class="arrayexpandcollapse">&plusmn;&nbsp;' . $key . '</a> => ' . self::_cleanData($value) . '<br />';
+                $retVal .= '<a href="#" style="text-decoration:none" class="arrayexpandcollapse">&plusmn;&nbsp;' . $key . '</a> => ' . self::cleanData($value) . '<br />';
             } elseif (is_object($value)) {
                 $retVal .= $key . ' => ' . get_class($value) . ' Object()' . $linebreak;
             } elseif (is_null($value)) {

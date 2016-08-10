@@ -64,7 +64,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
     }
 
     /**
-     * Gets menu tab for the DebugBar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */

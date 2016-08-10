@@ -76,7 +76,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     }
 
     /**
-     * Gets menu tab for the DebugBar
+     * Gets menu tab for the Debug Bar
      *
      * @return string
      */
@@ -86,7 +86,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Cache extends ZFDebug_Controller_Pl
     }
 
     /**
-     * Gets content panel for the DebugBar
+     * Gets content panel for the Debug Bar
      *
      * @return string
      */

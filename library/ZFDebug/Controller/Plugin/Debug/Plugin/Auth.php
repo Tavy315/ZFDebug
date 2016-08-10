@@ -134,7 +134,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
             $html = '<h4>No identity</h4>';
         } else {
             $html = '<h4>Identity</h4>';
-            $html .= $this->_cleanData($this->auth->getIdentity());
+            $html .= $this->cleanData($this->auth->getIdentity());
         }
 
         return $html;

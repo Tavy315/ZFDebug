@@ -75,7 +75,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
         $dom->loadHtml($body);
         libxml_use_internal_errors($errors);
         $panel = '<h4>HTML Information</h4>';
-        $panel .= $this->_isXhtml();
+        $panel .= $this->isXhtml();
         $linebreak = $this->getLinebreak();
         $panel .= $dom->getElementsByTagName('*')->length . ' Tags in ' . round(strlen($body) / 1024, 2) . 'K' . $linebreak
             . $dom->getElementsByTagName('link')->length . ' Link Tags' . $linebreak
