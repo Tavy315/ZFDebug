@@ -78,7 +78,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
             return 'No entitymanagers available';
         } else {
             foreach ($this->em as $em) {
-                if (!$em instanceof \Doctrine\ORM\EntityManager) {
+                if (!$em instanceof \Doctrine\ORM\EntityManagerInterface) {
                     return "the entitymanager you passed is not an instance of \Doctrine\\ORM\\EntityManager";
                 }
             }
