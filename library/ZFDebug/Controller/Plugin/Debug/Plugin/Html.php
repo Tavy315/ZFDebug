@@ -64,27 +64,27 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
     {
         $body = Zend_Controller_Front::getInstance()->getResponse()->getBody();
 
-        /* added by Octav */
         if ('' == $body) {
             return '';
         }
-        /* added by Octav */
 
         $errors = libxml_use_internal_errors(true);
-        $dom = new DOMDocument();
-        $dom->loadHtml($body);
-        libxml_use_internal_errors($errors);
-        $panel = '<h4>HTML Information</h4>';
-        $panel .= $this->isXhtml();
-        $linebreak = $this->getLinebreak();
-        $panel .= $dom->getElementsByTagName('*')->length . ' Tags in ' . round(strlen($body) / 1024, 2) . 'K' . $linebreak
-            . $dom->getElementsByTagName('link')->length . ' Link Tags' . $linebreak
-            . $dom->getElementsByTagName('script')->length . ' Script Tags' . $linebreak
-            . $dom->getElementsByTagName('img')->length . ' Images' . $linebreak
-            . '<form method="post" action="http://validator.w3.org/check"><p><input type="hidden" name="fragment" value="'
-            . htmlentities($body) . '"' . $this->getClosingBracket() . '<input type="submit" value="Validate With W3C"'
-            . $this->getClosingBracket() . '</p></form>';
 
-        return $panel;
+        $dom = new DOMDocument();
+        $dom->loadHTML($body);
+
+        libxml_use_internal_errors($errors);
+
+        $linebreak = $this->getLinebreak();
+
+        return '<h4>HTML Information</h4>'
+        . $this->isXhtml()
+        . $dom->getElementsByTagName('*')->length . ' Tags in ' . round(strlen($body) / 1024, 2) . 'K' . $linebreak
+        . $dom->getElementsByTagName('link')->length . ' Link Tags' . $linebreak
+        . $dom->getElementsByTagName('script')->length . ' Script Tags' . $linebreak
+        . $dom->getElementsByTagName('img')->length . ' Images' . $linebreak
+        . '<form method="post" action="http://validator.w3.org/check"><p>'
+        . '<input type="hidden" name="fragment" value="' . htmlentities($body) . '"' . $this->getClosingBracket()
+        . '<input type="submit" value="Validate With W3C"' . $this->getClosingBracket() . '</p></form>';
     }
 }

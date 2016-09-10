@@ -207,7 +207,7 @@ class ZFDebug_Controller_Plugin_Debug extends Zend_Controller_Plugin_Abstract
             return;
         }
 
-        $disable = Zend_Controller_Front::getInstance()->getRequest()->getParam('ZFDEBUG_DISABLE');
+        $disable = $this->getRequest()->getParam('ZFDEBUG_DISABLE');
         if (isset($disable)) {
             return;
         }
