@@ -21,12 +21,12 @@ $options = [
     ],
 ];
 
-$debug = new ZFDebug_Controller_Plugin_Debug($options);
+$debug = new \ZFDebug\Controller\Plugin\Debug($options);
 $frontController->registerPlugin($debug);
 
 // Alternative registration of plugins, also possible elsewhere in dispatch process
-$zfDebug = Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug');
-$zfDebug->registerPlugin(new ZFDebug_Controller_Plugin_Debug_Plugin_Database($optionsArray));
+$zfDebug = \Zend_Controller_Front::getInstance()->getPlugin('Debug');
+$zfDebug->registerPlugin(new \ZFDebug\Controller\Plugin\Debug\Plugin\Database($optionsArray));
 
 /**
  * Registering other plugins and start dispatch
