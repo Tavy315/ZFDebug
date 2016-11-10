@@ -12,15 +12,12 @@
   "homepage": "https://github.com/Tavy315/ZFDebug",
   "license": "BSD-3-Clause",
   "autoload": {
-    "psr-0": {
-      "ZFDebug_": "library/"
+    "psr-4": {
+      "ZFDebug\\": "src/"
     }
   },
-  "include-path": [
-    "library/"
-  ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.5.9",
     "tavy315/zendframework1": "1.*"
   },
   "authors": [
@@ -66,7 +63,7 @@
     },
     {
       "name": "Octavian Matei",
-      "homepage": "http://www.octav.name",
+      "homepage": "https://www.octav.name",
       "role": "Contributor"
     }
   ]
