@@ -1,15 +1,14 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Interface PluginInterface
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-interface ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+interface PluginInterface
 {
     /**
      * Has to return html code for the menu tab

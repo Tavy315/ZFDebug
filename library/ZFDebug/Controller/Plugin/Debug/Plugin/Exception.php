@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug;
+
 /**
- * ZFDebug Zend Additions
+ * Class Exception
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_Plugin_Abstract implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Exception extends \Zend_Controller_Plugin_Abstract implements PluginInterface
 {
     protected static $logger;
 
@@ -32,19 +33,24 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      *
      * @var array
      */
-    public static $errors = [ ];
+    public static $errors = [];
 
     protected $rendered = false;
 
     /**
      * Get the ZFDebug logger
      *
-     * @return bool|Zend_Log
+     * @return \Zend_Log|bool
      */
     public static function getLogger()
     {
         if (!self::$logger) {
-            if ($zfDebug = Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug')) {
+            /** @var Debug $zfDebug */
+            if ($zfDebug = \Zend_Controller_Front::getInstance()->getPlugin('ZFDebug_Controller_Plugin_Debug')) {
+                /**
+                 * @see Log::getLog()
+                 * @var \Zend_Log
+                 */
                 self::$logger = $zfDebug->getPlugin('Log')->getLog();
             } else {
                 return false;
@@ -80,7 +86,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
      */
     public function __construct()
     {
-        Zend_Controller_Front::getInstance()->registerPlugin($this);
+        \Zend_Controller_Front::getInstance()->registerPlugin($this);
 
         $this->originalErrorHandler = set_error_handler([ $this, 'errorHandler' ]);
     }
@@ -122,6 +128,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
         if (!($level & error_reporting())) {
             return false;
         }
+
         switch ($level) {
             case E_NOTICE:
             case E_USER_NOTICE:
@@ -143,6 +150,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
                 $type = 'Unknown, ' . $level;
                 break;
         }
+
         self::$errors[] = [
             'type'    => $type,
             'message' => $message,
@@ -151,12 +159,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
             'trace'   => debug_backtrace(),
         ];
 
-        $message = sprintf(
-            '%s in %s on line %d',
-            $message,
-            str_replace($_SERVER['DOCUMENT_ROOT'], '', $file),
-            $line
-        );
+        $message = sprintf('%s in %s on line %d', $message, str_replace($_SERVER['DOCUMENT_ROOT'], '', $file), $line);
 
         if (($logger = self::getLogger())) {
             $logger->$method($message);
@@ -172,61 +175,62 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Exception extends Zend_Controller_P
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
-     * @param Zend_Controller_Request_Abstract
+     * @param \Zend_Controller_Request_Abstract
      *
      */
-    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    public function routeStartup(\Zend_Controller_Request_Abstract $request)
     {
     }
 
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
-     * @param Zend_Controller_Request_Abstract
+     * @param \Zend_Controller_Request_Abstract
      *
      */
-    public function routeShutdown(Zend_Controller_Request_Abstract $request)
+    public function routeShutdown(\Zend_Controller_Request_Abstract $request)
     {
     }
 
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
-     * @param Zend_Controller_Request_Abstract
+     * @param \Zend_Controller_Request_Abstract
      *
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(\Zend_Controller_Request_Abstract $request)
     {
     }
 
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
-     * @param Zend_Controller_Request_Abstract
+     * @param \Zend_Controller_Request_Abstract
      *
      */
-    public function postDispatch(Zend_Controller_Request_Abstract $request)
+    public function postDispatch(\Zend_Controller_Request_Abstract $request)
     {
     }
 
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
-     * @param Zend_Controller_Request_Abstract
+     * @param \Zend_Controller_Request_Abstract
      *
      */
-    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
+    public function dispatchLoopStartup(\Zend_Controller_Request_Abstract $request)
     {
     }
 
     /**
      * Defined by Zend_Controller_Plugin_Abstract
      *
-     * @param Zend_Controller_Request_Abstract
+     * @param \Zend_Controller_Request_Abstract
      */
     public function dispatchLoopShutdown()
     {
-        $response = Zend_Controller_Front::getInstance()->getResponse();
+        $response = \Zend_Controller_Front::getInstance()->getResponse();
+        /** @var \Exception $e */
         foreach ($response->getException() as $e) {
             $exception = get_class($e) . ': ' . $e->getMessage()
                 . ' thrown in ' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $e->getFile())

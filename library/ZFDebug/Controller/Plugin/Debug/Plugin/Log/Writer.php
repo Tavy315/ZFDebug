@@ -1,18 +1,22 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin\Log;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin\Log;
+
 /**
- * ZFDebug Zend Additions
+ * Class Writer
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin\Log
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_Abstract
+class Writer extends \Zend_Log_Writer_Abstract
 {
-    protected $messages = [ ];
+    /** @var int */
     protected $errors = 0;
+
+    /** @var array */
+    protected $messages = [];
 
     public static function factory($config)
     {
@@ -33,7 +37,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
      * Write a message to the log.
      *
      * @param array $event event data
-     *
      */
     protected function _write($event)
     {
@@ -54,7 +57,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log_Writer extends Zend_Log_Writer_
             $this->errors++;
         }
 
-        if ($event['priority'] == ZFDebug_Controller_Plugin_Debug_Plugin_Log::ZFLOG) {
+        if ($event['priority'] == Log::ZFLOG) {
             $event['priorityName'] = $event['message']['time'];
             $event['memory'] = $event['message']['memory'];
             $event['message'] = $event['message']['message'];

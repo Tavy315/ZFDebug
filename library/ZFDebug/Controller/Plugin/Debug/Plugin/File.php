@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class File
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_File extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class File extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -52,7 +53,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File extends ZFDebug_Controller_Plu
      *
      * @param array $options
      */
-    public function __construct(array $options = [ ])
+    public function __construct(array $options = [])
     {
         isset($options['base_path']) || $options['base_path'] = $_SERVER['DOCUMENT_ROOT'];
         isset($options['library']) || $options['library'] = null;
@@ -102,13 +103,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_File extends ZFDebug_Controller_Plu
         $linebreak = $this->getLinebreak();
         $included = $this->getIncludedFiles();
         $html = '<h4>' . count($included) . ' files included worth ';
+
         $size = 0;
         foreach ($included as $file) {
             $size += filesize($file);
         }
         $html .= round($size / 1024, 1) . 'K</h4>';
 
-        $libraryFiles = [ ];
+        $libraryFiles = [];
         foreach ($this->library as $key => $value) {
             if ('' != $value) {
                 $libraryFiles[$key] = '<h4>' . $value . ' Files</h4>';

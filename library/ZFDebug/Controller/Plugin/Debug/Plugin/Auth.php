@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Auth
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id: $
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Auth extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -21,7 +22,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
     /**
      * Contains Zend_Auth object
      *
-     * @var Zend_Auth
+     * @var \Zend_Auth
      */
     protected $auth;
 
@@ -49,18 +50,17 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Auth extends ZFDebug_Controller_Plu
     /**
      * Contains ACL rules for this application
      *
-     * @var Zend_Acl
+     * @var \Zend_Acl
      */
     protected $acl;
 
     /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Auth
-     *
      * @var array
      */
     public function __construct(array $options = [])
     {
-        $this->auth = Zend_Auth::getInstance();
+        $this->auth = \Zend_Auth::getInstance();
+
         if (isset($options['user'])) {
             $this->user = $options['user'];
         }

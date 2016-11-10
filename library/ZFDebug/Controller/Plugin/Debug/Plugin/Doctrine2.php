@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Doctrine2
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2011 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Doctrine2 extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -23,7 +24,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      *
      * @var array
      */
-    protected $em = [ ];
+    protected $em = [];
 
     /**
      * If true, try to use sqlparse to prettify queries
@@ -35,12 +36,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
     public static $sqlParseEnabled = false;
 
     /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
-     *
      * @param array $options
-     *
      */
-    public function __construct(array $options = [ ])
+    public function __construct(array $options = [])
     {
         if (isset($options['entityManagers'])) {
             $this->em = $options['entityManagers'];
@@ -75,16 +73,16 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
     public function getTab()
     {
         if (!is_array($this->em) || !count($this->em)) {
-            return 'No entitymanagers available';
+            return 'No entity managers available';
         } else {
             foreach ($this->em as $em) {
                 if (!$em instanceof \Doctrine\ORM\EntityManagerInterface) {
-                    return "the entitymanager you passed is not an instance of \Doctrine\\ORM\\EntityManager";
+                    return "The entity manager you passed is not an instance of \\Doctrine\\ORM\\EntityManager";
                 }
             }
         }
 
-        $adapterInfo = [ ];
+        $adapterInfo = [];
 
         foreach ($this->em as $em) {
             if ($logger = $em->getConnection()->getConfiguration()->getSqlLogger()) {
@@ -115,9 +113,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
             return '';
         }
 
-        $html = '<h4>Doctrine2 queries - Doctrine2 (Common v' . Doctrine\Common\Version::VERSION
-            . ' | DBAL v' . Doctrine\DBAL\Version::VERSION
-            . ' | ORM v' . Doctrine\ORM\Version::VERSION . ')</h4>';
+        $html = '<h4>Doctrine2 queries - Doctrine2 (Common v' . \Doctrine\Common\Version::VERSION
+            . ' | DBAL v' . \Doctrine\DBAL\Version::VERSION
+            . ' | ORM v' . \Doctrine\ORM\Version::VERSION . ')</h4>';
 
         foreach ($this->em as $name => $em) {
             $html .= '<h4>EntityManager ' . $name . '</h4>';
@@ -144,7 +142,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
         foreach ($logger->queries as $query) {
             $queries .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL . sprintf('%0.2f', round($query['executionMS'] * 1000, 2)) . 'ms</td>' . PHP_EOL . '<td>';
 
-            $params = [ ];
+            $params = [];
             if (!empty($query['params'])) {
                 $params = $query['params'];
                 array_walk($params, [ $this, 'addQuotes' ]);
@@ -184,13 +182,12 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2 extends ZFDebug_Controlle
      *
      * @param mixed $value
      * @param mixed $key
-     *
      */
     protected function addQuotes(&$value, $key)
     {
         if (is_scalar($value)) {
             $value = "'" . $value . "'";
-        } elseif ($value instanceof DateTime) {
+        } elseif ($value instanceof \DateTime) {
             // Try to accommodate for Doctrine's use of more advanced data types
             $value = "'" . $value->format('c') . "'";
         } elseif (is_array($value)) {

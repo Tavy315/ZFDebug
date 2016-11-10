@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Locale
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Locale extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -18,9 +19,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
      */
     protected $identifier = 'locale';
 
-    /**
-     * @var Zend_Controller_Request_Abstract
-     */
+    /** @var \Zend_Controller_Request_Abstract */
     protected $request;
 
     /**
@@ -31,11 +30,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
     protected $callback;
 
     /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
-     *
      * @param array $options
      */
-    public function __construct(array $options = [ ])
+    public function __construct(array $options = [])
     {
         if (isset($options['callback']) && is_callable($options['callback'])) {
             $this->callback = $options['callback'];
@@ -82,8 +79,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Locale extends ZFDebug_Controller_P
     {
         $linebreak = $this->getLinebreak();
         $html = '<h4> View Locale info</h4>' . $linebreak;
-        if (Zend_Registry::isRegistered('Zend_Locale')) {
-            $html .= 'Zend Locale is set to <strong>' . Zend_Registry::get('Zend_Locale') . '</strong>' . $linebreak;
+        if (\Zend_Registry::isRegistered('Zend_Locale')) {
+            $html .= 'Zend Locale is set to <strong>' . \Zend_Registry::get('Zend_Locale') . '</strong>' . $linebreak;
             $html .= '<h4>Change Locale</h4>' . $linebreak;
             $html .= '<form method="post"><input name="debug_locale" type="text" placeholder="Locale..." class="input-small" /></form>';
         } else {

@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Variables
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Variables extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -18,17 +19,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
      */
     protected $identifier = 'variables';
 
-    /**
-     * @var Zend_Controller_Request_Abstract
-     */
+    /** @var \Zend_Controller_Request_Abstract */
     protected $request;
-
-    /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Gets identifier for this plugin
@@ -67,13 +59,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
      */
     public function getPanel()
     {
-        $this->request = Zend_Controller_Front::getInstance()->getRequest();
-        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
+        $this->request = \Zend_Controller_Front::getInstance()->getRequest();
+
+        $viewRenderer = \Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         if ($viewRenderer->view && method_exists($viewRenderer->view, 'getVars')) {
             $viewVars = $this->cleanData($viewRenderer->view->getVars());
         } else {
             $viewVars = "No 'getVars()' method in view class";
         }
+
         $vars = '<div style="width:50%;float:left;">';
         $vars .= '<h4>View variables</h4>' . '<div id="ZFDebug_vars" style="margin-left:-22px">' . $viewVars . '</div>';
         $vars .= '</div><div style="width:45%;float:left;">';
@@ -87,7 +81,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Variables extends ZFDebug_Controlle
         ksort($constants['user']);
         $vars .= '<div id="ZFDebug_constants" style="margin-left:-22px">' . $this->cleanData($constants['user']) . '</div>';
 
-        $registry = Zend_Registry::getInstance();
+        $registry = \Zend_Registry::getInstance();
         $vars .= '<h4>Zend Registry</h4>';
         $registry->ksort();
         $vars .= '<div id="ZFDebug_registry" style="margin-left:-22px">' . $this->cleanData($registry) . '</div>';

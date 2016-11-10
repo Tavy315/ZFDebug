@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Html
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Html extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -17,13 +18,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
      * @var string
      */
     protected $identifier = 'html';
-
-    /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Html
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Gets identifier for this plugin
@@ -62,7 +56,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
      */
     public function getPanel()
     {
-        $body = Zend_Controller_Front::getInstance()->getResponse()->getBody();
+        $body = \Zend_Controller_Front::getInstance()->getResponse()->getBody();
 
         if ('' == $body) {
             return '';
@@ -70,7 +64,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
 
         $errors = libxml_use_internal_errors(true);
 
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $dom->loadHTML($body);
 
         libxml_use_internal_errors($errors);
@@ -85,6 +79,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Html extends ZFDebug_Controller_Plu
         . $dom->getElementsByTagName('img')->length . ' Images' . $linebreak
         . '<form method="post" action="http://validator.w3.org/check"><p>'
         . '<input type="hidden" name="fragment" value="' . htmlentities($body) . '"' . $this->getClosingBracket()
-        . '<input type="submit" value="Validate With W3C"' . $this->getClosingBracket() . '</p></form>';
+        . '<input type="submit" value="Validate With W3C"' . $this->getClosingBracket()
+        . '</p></form>';
     }
 }

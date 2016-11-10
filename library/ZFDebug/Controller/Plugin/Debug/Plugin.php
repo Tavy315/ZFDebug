@@ -1,16 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug;
+
 /**
- * ZFDebug Zend Additions
+ * Class Plugin
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License New BSD License
- * @version    $Id: $
+ * @package ZFDebug\Controller\Plugin\Debug
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin
+class Plugin
 {
+    /** @var null|string */
     protected $closingBracket = null;
 
     public function getLinebreak()
@@ -38,14 +38,14 @@ class ZFDebug_Controller_Plugin_Debug_Plugin
 
     protected function isXhtml()
     {
-        $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
-        /** @see Zend_View_Helper_Doctype::doctype() */
-        /** @var Zend_View_Helper_Doctype $doctype */
-        $doctype = $view->doctype();
+        $view = \Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
 
-        /** @see Zend_View_Helper_Doctype::isXhtml() */
+        /** @see \Zend_View_Helper_Doctype::doctype() */
+        /** @var \Zend_View_Helper_Doctype */
+        $docType = $view->doctype();
 
-        return $doctype->isXhtml();
+        /** @see \Zend_View_Helper_Doctype::isXhtml() */
+        return $docType->isXhtml();
     }
 
     /**

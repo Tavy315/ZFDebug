@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Session
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
- * @version    $Id$
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Session extends Plugin implements PluginInterface
 {
     /**
      * Contains plugin identifier name
@@ -17,13 +18,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
      * @var string
      */
     protected $identifier = 'session';
-
-    /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Gets identifier for this plugin
@@ -39,7 +33,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
      * Returns the base64 encoded icon
      *
      * @return string
-     *
      */
     public function getIconData()
     {
@@ -98,7 +91,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Session extends ZFDebug_Controller_
                 $retVal .= $key . ' => Array' . $linebreak;
                 $retVal .= self::cleanData($value);
             } elseif (is_object($value)) {
-                $array = [ ];
+                $array = [];
                 foreach ($value as $member => $data) {
                     $array[$member] = $data;
                 }

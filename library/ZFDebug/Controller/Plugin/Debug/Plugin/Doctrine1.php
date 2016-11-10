@@ -1,15 +1,16 @@
 <?php
+namespace ZFDebug\Controller\Plugin\Debug\Plugin;
+
+use ZFDebug\Controller\Plugin\Debug\Plugin;
+
 /**
- * ZFDebug Zend Additions
+ * Class Doctrine1
  *
- * @category   ZFDebug
- * @package    ZFDebug_Controller
- * @subpackage Plugins
- * @author     aur1mas <aur1mas@devnet.lt>
- * @copyright  Copyright (c) 2008-2009 ZF Debug Bar Team (http://code.google.com/p/zfdebug)
- * @license    http://code.google.com/p/zfdebug/wiki/License     New BSD License
+ * @package ZFDebug\Controller\Plugin\Debug\Plugin
+ * @author  Octavian Matei <octav@octav.name>
+ * @since   10.11.2016
  */
-class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controller_Plugin_Debug_Plugin implements ZFDebug_Controller_Plugin_Debug_Plugin_Interface
+class Doctrine1 extends Plugin implements PluginInterface
 {
     /**
      * plugin identified name
@@ -18,23 +19,17 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
      */
     protected $identifier = 'doctrine1';
 
-    /**
-     * @var \Doctrine_Connection_Profiler
-     */
+    /** @var \Doctrine_Connection_Profiler */
     protected $profiler = null;
 
     /**
-     * Create ZFDebug_Controller_Plugin_Debug_Plugin_Dprofiler
-     *
-     * @param null|\Doctrine_Connection_Profiler $profiler
-     *
-     * @author Paulius Petronis <paulius@art21.lt>
+     * @param \Doctrine_Connection_Profiler|null $profiler
      */
     public function __construct($profiler = null)
     {
         if (!$profiler) {
-            $profiler = new Doctrine_Connection_Profiler();
-            $conn = Doctrine_Manager::connection();
+            $profiler = new \Doctrine_Connection_Profiler();
+            $conn = \Doctrine_Manager::connection();
             $conn->setListener($profiler);
         }
         $this->profiler = $profiler;
@@ -43,7 +38,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
     /**
      * Gets menu tab for the Debug Bar
      *
-     * @author Paulius Petronis <paulius@art21.lt>
      * @return string
      */
     public function getTab()
@@ -64,7 +58,6 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
     /**
      * Gets content panel for the Debug Bar
      *
-     * @author Paulius Petronis <paulius@art21.lt>
      * @return string
      */
     public function getPanel()
@@ -95,9 +88,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine1 extends ZFDebug_Controlle
     }
 
     /**
-     * returns a unique identifier for the specific plugin
+     * Returns an unique identifier for the specific plugin
      *
-     * @author aur1mas <aur1mas@devnet.lt>
      * @return string
      */
     public function getIdentifier()
