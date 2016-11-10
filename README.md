@@ -63,7 +63,7 @@ folder. Then add the following method to your bootstrap class (in ZF1.8+):
                 'Exception',
             ),
         );
-        $debug = new ZFDebug_Controller_Plugin_Debug($options);
+        $debug = new ZFDebug\Controller\Plugin\Debug($options);
 
         $this->bootstrap('frontController');
         $frontController = $this->getResource('frontController');
@@ -81,14 +81,14 @@ Some use case will require that you set up callback functions. Especially, these
 You can leverage those functionalities by setting the following class:
 
     <?php
-    class Application_Controller_Plugin_Debug extends ZFDebug_Controller_Plugin_Debug
+    class Application_Controller_Plugin_Debug extends \ZFDebug\Controller\Plugin\Debug
     {
         public function __construct($options = null)
         {
             // avoids constructing before required vars are available
         }
 
-        public function preDispatch(Zend_Controller_Request_Abstract $request)
+        public function preDispatch(\Zend_Controller_Request_Abstract $request)
         {
             if (APPLICATION_ENV !== 'production') {
                 $auth_callback = function ($raw_user) {
@@ -104,7 +104,7 @@ You can leverage those functionalities by setting the following class:
                     'image_path' => null,
                     'plugins' => array(
                         'Variables',
-                        'ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2' => array(
+                        'Doctrine2' => array(
                             'entityManagers' => array(
                                 \Zend_Registry::get('em')
                             ),
@@ -146,13 +146,13 @@ Here is example configuration for using the Doctrine Plugin:
                     'File',
                     'Memory',
                     'Time',
-                    new ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine(),
+                    'Doctrine1',
                     'Exception'
                 )
             );
 
-            $ZFDebug = new ZFDebug_Controller_Plugin_Debug($options);
-            $frontController = Zend_Controller_Front::getInstance();
+            $ZFDebug = new \ZFDebug\Controller\Plugin\Debug($options);
+            $frontController = \Zend_Controller_Front::getInstance();
             $frontController->registerPlugin($ZFDebug);
 
             return $ZFDebug;
@@ -167,7 +167,7 @@ Here is example configuration for using the Doctrine2 Plugin:
     protected function _initZFDebug()
     {
         if (APPLICATION_ENV == 'development') {
-            $autoloader = Zend_Loader_Autoloader::getInstance();
+            $autoloader = \Zend_Loader_Autoloader::getInstance();
             $autoloader->registerNamespace('ZFDebug');
             $em = $this->bootstrap('doctrine')->getResource('doctrine')->getEntityManager();
             $em->getConnection()->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\DebugStack());
@@ -175,7 +175,7 @@ Here is example configuration for using the Doctrine2 Plugin:
             $options = array(
                 'plugins' => array(
                     'Variables',
-                    'ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2'	=> array(
+                    'Doctrine2'	=> array(
                         'entityManagers' => array($em),
                     ),
                     'File' => array(
@@ -192,7 +192,7 @@ Here is example configuration for using the Doctrine2 Plugin:
                 )
             );
 
-            $debug = new ZFDebug_Controller_Plugin_Debug($options);
+            $debug = new \ZFDebug\Controller\Plugin\Debug($options);
             $this->bootstrap('frontController');
             $frontController = $this->getResource('frontController');
             $frontController->registerPlugin($debug);
