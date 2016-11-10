@@ -106,7 +106,7 @@ class File extends Plugin implements PluginInterface
 
         $size = 0;
         foreach ($included as $file) {
-            $size += filesize($file);
+            $size += is_readable($file) ? filesize($file) : 0;
         }
         $html .= round($size / 1024, 1) . 'K</h4>';
 
