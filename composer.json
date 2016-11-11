@@ -11,15 +11,6 @@
   ],
   "homepage": "https://github.com/Tavy315/ZFDebug",
   "license": "BSD-3-Clause",
-  "autoload": {
-    "psr-4": {
-      "ZFDebug\\": "src/"
-    }
-  },
-  "require": {
-    "php": ">=5.5.9",
-    "tavy315/zendframework1": "1.*"
-  },
   "authors": [
     {
       "name": "Joakim Nygård",
@@ -66,5 +57,14 @@
       "homepage": "https://www.octav.name",
       "role": "Contributor"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "ZFDebug\\": "src/ZFDebug/"
+    }
+  },
+  "require": {
+    "php": ">=5.5.9",
+    "tavy315/zendframework1": "1.*"
+  }
 }
