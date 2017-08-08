@@ -114,9 +114,9 @@ class Log extends \Zend_Controller_Plugin_Abstract implements PluginInterface
     public function mark($name, $logFirst = false)
     {
         if (isset($this->marks[$name])) {
-            $this->marks[$name]['time'] = round((microtime(true) - $_SERVER['REQUEST_TIME']) * 1000 - $this->marks[$name]['time']) . 'ms';
+            $this->marks[$name]['time'] = round((microtime(true) - $_SERVER['REQUEST_TIME']) * 1000 - (float) $this->marks[$name]['time']) . 'ms';
             if (function_exists('memory_get_usage')) {
-                $this->marks[$name]['memory'] = round((memory_get_usage() - $this->marks[$name]['memory']) / 1024) . 'K';
+                $this->marks[$name]['memory'] = round((memory_get_usage() - (float) $this->marks[$name]['memory']) / 1024) . 'K';
             } else {
                 $this->marks[$name]['memory'] = 'N/A';
             }
