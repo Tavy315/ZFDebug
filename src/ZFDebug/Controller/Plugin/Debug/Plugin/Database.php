@@ -2,6 +2,7 @@
 namespace ZFDebug\Controller\Plugin\Debug\Plugin;
 
 use ZFDebug\Controller\Plugin\Debug\Plugin;
+use ZFDebug\Db\Profiler;
 
 /**
  * Class Database
@@ -25,6 +26,9 @@ class Database extends Plugin implements PluginInterface
     /** @var bool */
     protected $explain = false;
 
+    /** @var bool */
+    protected $_backtrace = false;
+
     /**
      * @param array $options
      */
@@ -33,7 +37,12 @@ class Database extends Plugin implements PluginInterface
         if (!isset($options['adapter']) || !count($options['adapter'])) {
             if (\Zend_Db_Table_Abstract::getDefaultAdapter()) {
                 $adapter = \Zend_Db_Table_Abstract::getDefaultAdapter();
-                $adapter->getProfiler()->setEnabled(true);
+                if (isset($options['backtrace']) && $options['backtrace']) {
+                    $this->_backtrace = true;
+                    $adapter->setProfiler(new Profiler(true));
+                } else {
+                    $adapter->getProfiler()->setEnabled(true);
+                }
                 $this->db[0] = $adapter;
             }
         } elseif ($options['adapter'] instanceof \Zend_Db_Adapter_Abstract) {
@@ -90,7 +99,8 @@ class Database extends Plugin implements PluginInterface
         /** @var \Zend_Db_Adapter_Abstract $adapter */
         foreach ($this->db as $adapter) {
             $profiler = $adapter->getProfiler();
-            $adapterInfo[] = $profiler->getTotalNumQueries() . ' in ' . round($profiler->getTotalElapsedSecs() * 1000, 2) . ' ms';
+            $adapterInfo[] = $profiler->getTotalNumQueries() . ' in '
+                . round($profiler->getTotalElapsedSecs() * 1000, 2) . ' ms';
         }
         $html = implode(' / ', $adapterInfo);
 
@@ -132,7 +142,7 @@ class Database extends Plugin implements PluginInterface
         foreach ($this->db as $name => $adapter) {
             if ($profiles = $adapter->getProfiler()->getQueryProfiles()) {
                 $adapter->getProfiler()->setEnabled(false);
-                if (1 < count($this->db)) {
+                if (count($this->db) > 1) {
                     $html .= '<h4>Adapter ' . $name . '</h4>';
                 }
                 $html .= '<table cellspacing="0" cellpadding="0" width="100%">';
@@ -178,6 +188,24 @@ class Database extends Plugin implements PluginInterface
                     }
 
                     $html .= '</td>' . PHP_EOL . '</tr>' . PHP_EOL;
+
+                    if ($this->_backtrace) {
+                        $trace = $profile->getTrace();
+
+                        if (count($trace) > 0) {
+                            array_walk(
+                                $trace,
+                                function (&$v, $k) {
+                                    $v = ($k + 1) . '. ' . $v;
+                                }
+                            );
+
+                            $html .= '<tr>' . PHP_EOL
+                                . '<td></td>' . PHP_EOL
+                                . '<td>' . implode('<br />', $trace) . '</td>'
+                                . PHP_EOL . '</tr>' . PHP_EOL;
+                        }
+                    }
                 }
                 $html .= '</table>' . PHP_EOL;
             }
