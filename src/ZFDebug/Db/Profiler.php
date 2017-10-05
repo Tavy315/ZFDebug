@@ -34,14 +34,15 @@ class Profiler extends \Zend_Db_Profiler
             function ($t) {
                 return (isset($t['class']) ? $t['class'] : '')
                     . (isset($t['type']) ? $t['type'] : '')
-                    . $t['function'] . '() ' . $t['file'] . ':' . $t['line'];
+                    . $t['function'] . '() '
+                    . (isset($t['file']) ? $t['file'] . ':' : '')
+                    . (isset($t['line']) ? $t['line'] : '');
             },
             array_values(
                 array_filter(
                     debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
                     function ($t) {
-                        return (strstr($t['file'], 'application') !== false && strstr($t['class'], 'Zend_Controller_Front') === false)
-                            || (strstr($t['file'], 'library') !== false && strstr($t['file'], 'vendor') === false);
+                        return strstr(trim($t['file']), 'vendor') === false;
                     }
                 )
             )
