@@ -26,8 +26,6 @@ class Debug extends \Zend_Controller_Plugin_Abstract
      */
     protected $options = [
         'plugins' => [
-            'Memory'    => null,
-            'Time'      => null,
             'Variables' => null,
         ],
     ];
@@ -58,7 +56,7 @@ class Debug extends \Zend_Controller_Plugin_Abstract
      *
      * @var string
      */
-    protected $version = '1.7.3';
+    protected $version = '1.7.5';
 
     /**
      * Creates a new instance of the Debug Bar
