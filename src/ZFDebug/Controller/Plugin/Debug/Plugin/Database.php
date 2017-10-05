@@ -5,7 +5,7 @@ use ZFDebug\Controller\Plugin\Debug\Plugin;
 use ZFDebug\Db\Profiler;
 
 /**
- * Class Database
+ * Class Database.
  *
  * @package ZFDebug\Controller\Plugin\Debug\Plugin
  * @author  Octavian Matei <octav@octav.name>
@@ -13,18 +13,20 @@ use ZFDebug\Db\Profiler;
  */
 class Database extends Plugin implements PluginInterface
 {
-    /**
-     * Contains plugin identifier name
-     *
-     * @var string
-     */
-    protected $identifier = 'database';
-
     /** @var array */
     protected $db = [];
 
+    /** @var array */
+    protected $executedQueries = [];
+
     /** @var bool */
     protected $explain = false;
+
+    /** @var string */
+    protected $identifier = 'database';
+
+    /** @var string */
+    protected $profiler = '';
 
     /** @var bool */
     protected $_backtrace = false;
@@ -64,7 +66,7 @@ class Database extends Plugin implements PluginInterface
     }
 
     /**
-     * Gets identifier for this plugin
+     * Gets identifier for this plugin.
      *
      * @return string
      */
@@ -74,7 +76,7 @@ class Database extends Plugin implements PluginInterface
     }
 
     /**
-     * Returns the base64 encoded icon
+     * Returns the base64 encoded icon.
      *
      * @return string
      **/
@@ -84,31 +86,7 @@ class Database extends Plugin implements PluginInterface
     }
 
     /**
-     * Gets menu tab for the Debug Bar
-     *
-     * @return string
-     */
-    public function getTab()
-    {
-        if (!$this->db) {
-            return 'No adapter';
-        }
-
-        $adapterInfo = [];
-
-        /** @var \Zend_Db_Adapter_Abstract $adapter */
-        foreach ($this->db as $adapter) {
-            $profiler = $adapter->getProfiler();
-            $adapterInfo[] = $profiler->getTotalNumQueries() . ' in '
-                . round($profiler->getTotalElapsedSecs() * 1000, 2) . ' ms';
-        }
-        $html = implode(' / ', $adapterInfo);
-
-        return $html;
-    }
-
-    /**
-     * Gets content panel for the Debug Bar
+     * Gets content panel for the Debug Bar.
      *
      * @return string
      */
@@ -129,12 +107,20 @@ class Database extends Plugin implements PluginInterface
 
         $html .= '</h4>';
 
-        return $html . $this->getProfile();
+        return $html . $this->getProfile() . $this->repeatedQueries();
     }
 
+    /**
+     * @return string
+     */
     public function getProfile()
     {
+        if (!empty($this->profiler)) {
+            return $this->profiler;
+        }
+
         $html = '';
+
         /**
          * @var string                    $name
          * @var \Zend_Db_Adapter_Abstract $adapter
@@ -149,21 +135,24 @@ class Database extends Plugin implements PluginInterface
 
                 /** @var \Zend_Db_Profiler_Query $profile */
                 foreach ($profiles as $profile) {
-                    $html .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;" nowrap>' . PHP_EOL
+                    $html .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;width:10em;" nowrap>' . PHP_EOL
                         . sprintf('%0.2f', $profile->getElapsedSecs() * 1000) . 'ms</td>' . PHP_EOL . '<td>';
 
                     $params = $profile->getQueryParams();
                     array_walk($params, [ $this, 'addQuotes' ]);
                     $paramCount = count($params);
                     if ($paramCount) {
-                        $html .= htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $profile->getQuery(), 1));
+                        $executedQuery = htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $profile->getQuery(), 1));
                     } else {
-                        $html .= htmlspecialchars($profile->getQuery());
+                        $executedQuery = htmlspecialchars($profile->getQuery());
                     }
+
+                    $this->executedQueries[$executedQuery][] = $executedQuery;
+                    $html .= $executedQuery;
 
                     $supportedAdapter = ($adapter instanceof \Zend_Db_Adapter_Mysqli || $adapter instanceof \Zend_Db_Adapter_Pdo_Mysql);
 
-                    # Run explain if enabled, supported adapter and SELECT query
+                    // Run explain if enabled, supported adapter and SELECT query
                     if ($this->explain && $supportedAdapter) {
                         $html .= '</td><td style="color:#7F7F7F;padding-left:2em;" nowrap>';
 
@@ -181,7 +170,7 @@ class Database extends Plugin implements PluginInterface
                             $explainData['Rows'] = $explain['rows'];
 
                             foreach ($explainData as $key => $value) {
-                                $html .= "$key: <span style='color:#ffb13e'>$value</span><br>\n";
+                                $html .= $key . ': <span style="color:#ffb13e">' . $value . '</span><br>' . PHP_EOL;
                             }
                             $html .= '</div>';
                         }
@@ -211,6 +200,32 @@ class Database extends Plugin implements PluginInterface
             }
         }
 
+        $this->profiler = $html;
+
+        return $html;
+    }
+
+    /**
+     * Gets menu tab for the Debug Bar.
+     *
+     * @return string
+     */
+    public function getTab()
+    {
+        if (!$this->db) {
+            return 'No adapter';
+        }
+
+        $adapterInfo = [];
+
+        /** @var \Zend_Db_Adapter_Abstract $adapter */
+        foreach ($this->db as $adapter) {
+            $profiler = $adapter->getProfiler();
+            $adapterInfo[] = $profiler->getTotalNumQueries() . ' in '
+                . round($profiler->getTotalElapsedSecs() * 1000, 2) . ' ms';
+        }
+        $html = implode(' / ', $adapterInfo);
+
         return $html;
     }
 
@@ -218,5 +233,34 @@ class Database extends Plugin implements PluginInterface
     protected function addQuotes(&$value, $key)
     {
         $value = "'" . $value . "'";
+    }
+
+    /**
+     * @return string
+     */
+    protected function repeatedQueries()
+    {
+        if (!empty($this->executedQueries)) {
+            $this->executedQueries = array_filter(
+                $this->executedQueries,
+                function ($value) {
+                    return count($value) > 1;
+                }
+            );
+
+            if (!empty($this->executedQueries)) {
+                $queries = '<h4>Repeated Queries</h4>'
+                    . '<table cellspacing="0" cellpadding="0" width="100%">';
+
+                foreach ($this->executedQueries as $query => $regs) {
+                    $queries .= '<tr>' . PHP_EOL . '<td style="text-align:right;padding-right:2em;width:10em;" nowrap>' . PHP_EOL
+                        . count($regs) . '</td>' . PHP_EOL . '<td>' . $query . '</td>' . PHP_EOL . '</tr>';
+                }
+
+                $queries .= '</table>' . PHP_EOL;
+
+                return $queries;
+            }
+        }
     }
 }
