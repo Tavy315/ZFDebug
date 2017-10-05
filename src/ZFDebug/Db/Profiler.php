@@ -32,16 +32,16 @@ class Profiler extends \Zend_Db_Profiler
 
         $trace = array_map(
             function ($t) {
-                return $t['class'] . $t['type'] . $t['function'] . '() ' . $t['file'] . ':' . $t['line'];
+                return (isset($t['class']) ? $t['class'] : '')
+                    . (isset($t['type']) ? $t['type'] : '')
+                    . $t['function'] . '() ' . $t['file'] . ':' . $t['line'];
             },
             array_values(
                 array_filter(
                     debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
                     function ($t) {
-                        return (strstr($t['file'], 'application') !== false
-                                && strstr($t['class'], 'Zend_Controller_Front') === false)
-                            || (strstr($t['file'], 'library') !== false
-                                && strstr($t['file'], 'vendor') === false);
+                        return (strstr($t['file'], 'application') !== false && strstr($t['class'], 'Zend_Controller_Front') === false)
+                            || (strstr($t['file'], 'library') !== false && strstr($t['file'], 'vendor') === false);
                     }
                 )
             )
