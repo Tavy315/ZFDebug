@@ -42,7 +42,7 @@ class Profiler extends \Zend_Db_Profiler
                 array_filter(
                     debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
                     function ($t) {
-                        return strstr(trim($t['file']), 'vendor') === false;
+                        return strstr(!empty($t['file']) ? $t['file'] : '', 'vendor') === false;
                     }
                 )
             )
